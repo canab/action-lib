@@ -1,0 +1,96 @@
+﻿<project name="action-lib" basedir="." default="buildAll">
+
+    <property file="local.properties"/>
+    <property name="output.dir" value="../bin"/>
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+   		<classpath>
+   			<fileset dir="lib" includes="ant-contrib-*.jar"/>
+   		</classpath>
+   	</taskdef>
+
+    <if>
+        <os family="windows"/>
+        <then><property name="compc.compiler" value="compc.exe"/></then>
+        <else> <property name="compc.compiler" value="compc"/></else>
+    </if>
+
+    <target name="clean">
+	    <echo message="clean"/>
+        <delete dir="${output.dir}"/>
+        <mkdir dir="${output.dir}"/>
+    </target>
+
+    <target name="buildNumber">
+        <tstamp>
+            <format property="build.number" pattern="dd.MM.yy"/>
+        </tstamp>
+        <echo message="build.number: ${build.number}"/>
+    </target>
+
+    <target name="buildAll"
+            depends="clean, buildNumber, buildMotion, buildCommon, buildEngine, buildControls"/>
+
+    <target name="buildCumulative" depends="clean, buildNumber">
+	    <echo message="build..."/>
+        <compileSWC swcName="action-lib"
+                    srcPath="../common/src,../controls/src,../engine/src,../motion/src">
+        </compileSWC>
+    </target>
+
+    <target name="buildCommon" depends="buildNumber">
+	    <echo message="build common..."/>
+        <compileSWC swcName="common"
+                    srcPath="../common/src"
+                    externalPath="${output.dir}">
+        </compileSWC>
+    </target>
+
+    <target name="buildMotion" depends="buildNumber">
+	    <echo message="build motion..."/>
+        <compileSWC swcName="motion"
+                    srcPath="../motion/src"
+                    externalPath="${output.dir}">
+        </compileSWC>
+    </target>
+
+    <target name="buildEngine" depends="buildNumber">
+	    <echo message="build engine..."/>
+        <compileSWC swcName="engine"
+                    srcPath="../engine/src"
+                    externalPath="${output.dir}">
+        </compileSWC>
+    </target>
+
+    <target name="buildControls" depends="buildNumber">
+	    <echo message="build controls..."/>
+        <compileSWC swcName="controls"
+                    srcPath="../controls/src"
+                    externalPath="${output.dir}">
+        </compileSWC>
+    </target>
+
+    <macrodef name="compileSWC">
+        <attribute name="swcName"/>
+        <attribute name="srcPath"/>
+        <attribute name="externalPath" default="."/>
+        <sequential>
+            <delete>
+                <fileset dir="${output.dir}" includes="@{swcName}*.swc"/>
+            </delete>
+
+            <!--suppress AntResolveInspection -->
+            <var name="output.file" value="${output.dir}/@{swcName}-${build.number}.swc"/>
+
+            <exec executable="${flex.sdk.dir}/bin/${compc.compiler}" failonerror="true">
+                <arg line="-debug=true"/>
+                <arg line="-source-path+=@{srcPath}"/>
+                <arg line="-include-sources+=@{srcPath}"/>
+                <arg line="-external-library-path+=@{externalPath}"/>
+                <!--suppress AntResolveInspection -->
+                <arg line="-output=${output.file}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+</project>
