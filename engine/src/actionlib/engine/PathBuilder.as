@@ -168,7 +168,7 @@ package actionlib.engine
 
 		private function pointEnabled(point:PathPoint):Boolean
 		{
-			return point.color & _enabledChannels > 0;
+			return (point.color & _enabledChannels) > 0;
 		}
 
 		/**
