@@ -1,6 +1,6 @@
 package actionlib.common.query.mappers
 {
-	public function name(item:Object):String
+	public function nameField(item:Object):String
 	{
 		if (!item)
 			return null;
