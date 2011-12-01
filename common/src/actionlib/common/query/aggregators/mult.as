@@ -1,7 +1,7 @@
 package actionlib.common.query.aggregators
 {
-	public function mult(result:*, value:Number):Number
+	public function mult(result:Number, value:Number):Number
 	{
-		return (result === undefined) ? value : Number(result) * value;
+		return result * value;
 	}
 }

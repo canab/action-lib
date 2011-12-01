@@ -29,21 +29,13 @@ package actionlib.common.query
 
 		public function where(condition:Function):Query
 		{
-			if (condition == null)
-				throw new NullParameterError();
-
-			_condition = condition;
-
+			_condition = condition || trueCondition;
 			return this;
 		}
 
 		public function map(mapper:Function):Query
 		{
-			if (mapper == null)
-				throw new NullParameterError();
-
-			_mapper = mapper;
-
+			_mapper = mapper || selfMapper;
 			return this;
 		}
 
@@ -54,8 +46,7 @@ package actionlib.common.query
 
 		public function findFirst(mapper:Function = null):*
 		{
-			if (mapper != null)
-				_mapper = mapper;
+			map(mapper);
 
 			for each (var item:* in _collection)
 			{
@@ -77,8 +68,7 @@ package actionlib.common.query
 
 		public function select(mapper:Function = null):Array
 		{
-			if (mapper != null)
-				_mapper = mapper;
+			map(mapper);
 
 			var result:Array = [];
 
@@ -97,11 +87,22 @@ package actionlib.common.query
 				throw new NullParameterError();
 
 			var result:* = undefined;
+			var isFirstItem:Boolean = true;
 
 			for each (var item:* in _collection)
 			{
-				if (_condition(item))
+				if (!_condition(item))
+					continue;
+
+				if (isFirstItem)
+				{
+					result = _mapper(item);
+					isFirstItem = false;
+				}
+				else
+				{
 					result = aggregator(result, _mapper(item));
+				}
 			}
 
 			return result;

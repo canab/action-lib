@@ -2,7 +2,7 @@ package actionlib.common.query.mappers
 {
 	import actionlib.common.utils.ReflectUtil;
 
-	public function copyToNewObject(type:Class):Function
+	public function typedClone(type:Class):Function
 	{
 		return function(item:*):Object
 		{
