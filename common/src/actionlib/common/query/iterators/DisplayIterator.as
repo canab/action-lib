@@ -7,8 +7,9 @@ package actionlib.common.query.iterators
 	public class DisplayIterator extends Proxy
 	{
 		private var _target:DisplayObjectContainer;
-		private var _childCount:int = -1;
+
 		private var _childNum:int = 0;
+		private var _childCount:int = 0;
 
 		public function DisplayIterator(target:DisplayObjectContainer)
 		{
@@ -17,7 +18,7 @@ package actionlib.common.query.iterators
 
 		override flash_proxy function nextNameIndex(index:int):int
 		{
-			if (_childCount == -1)
+			if (_childCount == 0)
 				_childCount = _target.numChildren;
 
 			return _childNum < _childCount ? 1 : 0;
