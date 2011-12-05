@@ -1,7 +1,6 @@
 package actionlib.common.query
 {
 	import actionlib.common.errors.NullParameterError;
-	import actionlib.common.query.iterators.DisplayIterator;
 	import actionlib.common.query.iterators.DisplayTreeIterator;
 
 	import flash.display.DisplayObjectContainer;
