@@ -44,6 +44,19 @@ package actionlib.common.query
 			return findFirst() != undefined;
 		}
 
+		public function count():int
+		{
+			var result:int = 0;
+
+			for each (var item:* in _collection)
+			{
+				if (_condition(item))
+					result++;
+			}
+
+			return result;
+		}
+
 		public function findFirst(mapper:Function = null):*
 		{
 			map(mapper);
@@ -76,6 +89,51 @@ package actionlib.common.query
 			{
 				if (_condition(item))
 					result.push(_mapper(item));
+			}
+
+			return result;
+		}
+
+		public function selectRange(maxResult:int, skipCount:int = 0):Array
+		{
+			var result:Array = [];
+			var skipNum:int = 0;
+
+			for each (var item:* in _collection)
+			{
+				if (!_condition(item))
+					continue;
+
+				if (skipNum < skipCount)
+				{
+					skipNum++;
+					continue;
+				}
+
+				result.push(_mapper(item));
+
+				if (result.length == maxResult)
+					break;
+			}
+
+			return result;
+		}
+
+		public function selectUnique(mapper:Function = null):Array
+		{
+			map(mapper);
+
+			var result:Array = [];
+
+			for each (var item:* in _collection)
+			{
+				if (!_condition(item))
+					continue;
+
+				if (result.indexOf(item) >= 0)
+					continue;
+
+				result.push(_mapper(item));
 			}
 
 			return result;
