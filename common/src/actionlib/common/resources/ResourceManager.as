@@ -1,8 +1,8 @@
 package actionlib.common.resources
 {
+	import actionlib.common.collections.StringMap;
 	import actionlib.common.errors.NullPointerError;
 	import actionlib.common.logging.Logger;
-	import actionlib.common.utils.MapUtil;
 
 	import flash.system.ApplicationDomain;
 
@@ -32,7 +32,7 @@ package actionlib.common.resources
 		///////////////////////////////////////////////////////////////////////////////////*/
 
 		private var _manager:LoadingManager = new LoadingManager();
-		private var _bundles:Object = {};
+		private var _bundles:StringMap = new StringMap(ResourceBundle);
 		private var _gcCounter:int = 0;
 
 		//noinspection JSUnusedLocalSymbols
@@ -86,15 +86,13 @@ package actionlib.common.resources
 
 			_gcCounter = 0;
 
-			var urls:Array = MapUtil.getKeys(_bundles);
-
-			for each (var url:String in urls)
+			for each (var url:String in _bundles.getKeys())
 			{
 				var bundle:ResourceBundle = _bundles[url];
 				if (!bundle.hasReferences)
 				{
 					bundle.dispose();
-					delete _bundles[url];
+					_bundles.removeKey(url);
 				}
 			}
 		}

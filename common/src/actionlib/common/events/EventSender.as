@@ -5,14 +5,11 @@ package actionlib.common.events
 	public class EventSender
 	{
 		private var _sender:Object;
-		private var _listeners:Vector.<Function>;
-		private var _listenersCopy:Vector.<Function>;
-		private var _listenersCopyValid:Boolean = false;
+		private var _listeners:Array = [];
 
 		public function EventSender(sender:Object)
 		{
 			_sender = sender;
-			_listeners = new Vector.<Function>();
 		}
 		
 		public function addListener(listener:Function):void
@@ -23,8 +20,6 @@ package actionlib.common.events
 				throw new Error("List already contains such listener");
 			else
 				_listeners.push(listener);
-
-			_listenersCopyValid = false;
 		}
 		
 		public function removeListener(listener:Function):void
@@ -35,25 +30,47 @@ package actionlib.common.events
 				_listeners.splice(_listeners.indexOf(listener), 1);
 			else
 				throw new Error("List doesn't contain such listener");
-
-			_listenersCopyValid = false;
 		}
 		
 		public function dispatch(argument:* = null):void
 		{
-			if (!_listenersCopyValid)
+			// complexity of this method
+			// is result of performance optimization
+
+			if (_listeners.length == 0)
+				return;
+
+			var handler:Function;
+			var numArgs:int;
+
+			if (_listeners.length == 1)
 			{
-				_listenersCopy = _listeners.slice();
-				_listenersCopyValid = true;
+				handler = _listeners[0];
+				numArgs = handler.length;
+
+				if (numArgs == 0)
+					handler();
+				else if (numArgs == 1)
+					handler(_sender);
+				else if (numArgs == 2)
+					handler(_sender, argument);
+				else
+					throw new ArgumentError();
+
+				return;
 			}
 
-			for each (var handler:Function in _listenersCopy)
+			var	_listenersCopy:Array = _listeners.slice();
+
+			for each (handler in _listenersCopy)
 			{
-				if (handler.length == 0)
+				numArgs = handler.length;
+
+				if (numArgs == 0)
 					handler();
-				else if (handler.length == 1)
+				else if (numArgs == 1)
 					handler(_sender);
-				else if (handler.length == 2)
+				else if (numArgs == 2)
 					handler(_sender, argument);
 				else
 					throw new ArgumentError();
