@@ -1,9 +1,12 @@
 package actionlib.common.localization
 {
 	import actionlib.common.events.EventSender;
+	import actionlib.common.logging.Logger;
 
 	public class MessageBundle
 	{
+		private static var _logger:Logger = new Logger(MessageBundle);
+
 		private var _readyEvent:EventSender = new EventSender(this);
 		private var _changeEvent:EventSender = new EventSender(this);
 
@@ -38,6 +41,9 @@ package actionlib.common.localization
 				var message:String = getMessage(messageId);
 
 				locText = locText.replace(token, message || token);
+
+				if (!message)
+					_logger.warn("Cannot find message for token '#'".replace("#", token));
 			}
 
 			return locText;
