@@ -6,14 +6,8 @@ package actionlib.common.commands
 	{
 		private var _completeEvent:EventSender = new EventSender(this);
 
-		public function AsincCommand()
+		public virtual function execute():void
 		{
-		}
-
-		public function onComplete(handler:Function):AsincCommand
-		{
-			_completeEvent.addListener(handler);
-			return this;
 		}
 
 		protected function dispatchComplete():void
@@ -21,8 +15,10 @@ package actionlib.common.commands
 			_completeEvent.dispatch();
 		}
 
-		public virtual function execute():void
+		public function onComplete(handler:Function):AsincCommand
 		{
+			_completeEvent.addListener(handler);
+			return this;
 		}
 
 		public function get completeEvent():EventSender
