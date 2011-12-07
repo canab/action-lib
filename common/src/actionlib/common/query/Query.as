@@ -1,6 +1,6 @@
 package actionlib.common.query
 {
-	import actionlib.common.errors.NullParameterError;
+	import actionlib.common.errors.NullPointerError;
 
 	public class Query
 	{
@@ -22,7 +22,7 @@ package actionlib.common.query
 		public function Query(collection:Object)
 		{
 			if (collection == null)
-				throw new NullParameterError();
+				throw new NullPointerError();
 
 			_collection = collection;
 		}
@@ -142,7 +142,7 @@ package actionlib.common.query
 		public function aggregate(aggregator:Function):*
 		{
 			if (aggregator == null)
-				throw new NullParameterError();
+				throw new NullPointerError();
 
 			var result:* = undefined;
 			var isFirstItem:Boolean = true;
