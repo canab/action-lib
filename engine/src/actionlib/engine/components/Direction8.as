@@ -25,6 +25,11 @@ package actionlib.engine.components
 				return direction;
 		}
 
+		public static function calculateFromPoints(sourcePoint:Object, destPoint:Object):int
+		{
+			return calculateFromCoords(destPoint.x - sourcePoint.x, destPoint.y - sourcePoint.y);
+		}
+
 		public static function calculateFromCoords(xDiff:Number, yDiff:Number):int
 		{
 			var angle:Number = (Math.atan2(yDiff, xDiff)) / Math.PI * 180 + 90;

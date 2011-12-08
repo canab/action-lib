@@ -156,6 +156,7 @@ package actionlib.engine.scene.renderers
 				_currentFrame = frameNum;
 				updateFrame();
 			}
+			stop();
 		}
 
 		public function get playCompleteEvent():EventSender

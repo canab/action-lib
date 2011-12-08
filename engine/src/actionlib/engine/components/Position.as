@@ -6,7 +6,7 @@ package actionlib.engine.components
 
 	public class Position extends Component
 	{
-		static public function fromPoint(point:Point):Position
+		static public function fromPoint(point:Object):Position
 		{
 			return new Position(point.x, point.y);
 		}
