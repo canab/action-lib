@@ -149,6 +149,12 @@ package actionlib.engine
 			if (debugMode)
 				_debug_drawPath();
 
+			if (_path.length > 1)
+			{
+				_path[0] = startPoint.clone();
+				_path[_path.length - 1] = finishPoint.clone();
+			}
+
 			return _path;
 		}
 
@@ -251,6 +257,7 @@ package actionlib.engine
 
 			if (middlePoint != _startPoint && middlePoint != _finishPoint)
 				_path.push(middlePoint.toPoint());
+			
 			_path.push(_finishPoint.toPoint());
 
 			return true;

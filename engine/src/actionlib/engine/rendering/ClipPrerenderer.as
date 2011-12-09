@@ -53,12 +53,14 @@ package actionlib.engine.rendering
 			_frames.push(getNextFrame());
 		}
 
-		public function renderAllFrames():void
+		public function renderAllFrames():Vector.<BitmapFrame>
 		{
 			while (!completed)
 			{
 				process();
 			}
+
+			return _frames;
 		}
 
 		private function getNextFrame():BitmapFrame
