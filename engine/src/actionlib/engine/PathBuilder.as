@@ -257,7 +257,7 @@ package actionlib.engine
 
 			if (middlePoint != _startPoint && middlePoint != _finishPoint)
 				_path.push(middlePoint.toPoint());
-			
+
 			_path.push(_finishPoint.toPoint());
 
 			return true;

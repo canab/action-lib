@@ -31,8 +31,12 @@ package actionlib.common.localization
 
 		public function getLocalizedText(text:String):String
 		{
-			// find tokens enclosed by curly braces
+			// tokens enclosed by curly braces
 			var tokens:Array = text.match(/{[^}]+}/g);
+
+			if (tokens.length == 0)
+				return _messages[text] || text;
+
 			var locText:String = text;
 
 			for each (var token:String in tokens)

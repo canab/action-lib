@@ -9,11 +9,6 @@ package actionlib.gui.utils
 	{
 		private static var _fontMapping:Object = {};
 
-		public static function surroundWithBraces(text:String):String
-		{
-			return "{" + text + "}";
-		}
-
 		public static function mapFont(sourceFont:String, targetFont:String):void
 		{
 			_fontMapping[sourceFont] = targetFont;

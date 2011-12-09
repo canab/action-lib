@@ -32,11 +32,7 @@ package actionlib.gui.controls
 		protected function initText():void
 		{
 			TextUtil.initTextField(_field);
-
-			var isDefinedInField:Boolean = _field.text.indexOf("{") >= 0
-					&& _field.text.indexOf("}") > 0;
-
-			text = isDefinedInField ? _field.text : TextUtil.surroundWithBraces(name);
+			text = _field.text;
 		}
 
 		override protected function applyLocalization():void
