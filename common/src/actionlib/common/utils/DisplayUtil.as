@@ -43,11 +43,6 @@ package actionlib.common.utils
 			object.y = position.y
 		}
 
-		static public function getPosition(object:Object):Point
-		{
-			return new Point(object.x, object.y);
-		}
-
 		static public function removeChildren(container:DisplayObjectContainer):void
 		{
 			while (container.numChildren > 0)

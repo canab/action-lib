@@ -1,4 +1,4 @@
-package actionlib.common.converting
+package actionlib.common.interfaces
 {
 	public interface IConverter
 	{

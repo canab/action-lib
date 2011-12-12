@@ -82,7 +82,7 @@ package actionlib.common.events
 			return _listeners.indexOf(func) >= 0;
 		}
 
-		public function set handler(value:Function):void
+		public function set listener(value:Function):void
 		{
 			addListener(value);
 		}

@@ -1,6 +1,6 @@
 package actionlib.common.localization
 {
-	import actionlib.common.converting.IConverter;
+	import actionlib.common.interfaces.IConverter;
 
 	public class LocalizationManager
 	{

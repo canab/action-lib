@@ -17,7 +17,7 @@ package actionlib.common.ui
 	{
 		static private var _instance:MouseManager;
 
-		public static function get instance():MouseManager
+		private static function get instance():MouseManager
 		{
 			if (!initialized)
 				throw new NotInitializedError();
@@ -38,6 +38,27 @@ package actionlib.common.ui
 		{
 			return Boolean(_instance);
 		}
+
+		public static function setPointer(pointer:Object, hideMouse:Boolean = true):void
+		{
+			instance.setPointer(pointer, hideMouse);
+		}
+
+		public static function resetPointer():void
+		{
+			instance.resetPointer();
+		}
+
+		public static function registerObject(target:DisplayObject, pointer:Object, hideMouse:Boolean = true):void
+		{
+			instance.registerObject(target, pointer, hideMouse);
+		}
+
+		public static function unRegisterObject(target:DisplayObject):void
+		{
+			instance.unRegisterObject(target);
+		}
+
 
 		/*///////////////////////////////////////////////////////////////////////////////////
 		//

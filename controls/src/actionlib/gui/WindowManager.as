@@ -32,7 +32,7 @@ package actionlib.gui
 
 		private function initialize():void
 		{
-			KeyboardManager.instance.pressEvent.addListener(onKeyPress);
+			KeyboardManager.pressEvent.addListener(onKeyPress);
 		}
 
 		//noinspection JSUnusedLocalSymbols

@@ -1,5 +1,7 @@
-package actionlib.common.converting
+package actionlib.common.converters
 {
+	import actionlib.common.interfaces.IConverter;
+
 	public class XmlToObjectConverter implements IConverter
 	{
 		private var _objectType:Class;

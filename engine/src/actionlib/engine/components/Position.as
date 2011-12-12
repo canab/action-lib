@@ -2,15 +2,22 @@ package actionlib.engine.components
 {
 	import actionlib.engine.core.Component;
 
+	import flash.display.DisplayObject;
+
 	import flash.geom.Point;
 
 	public class Position extends Component
 	{
-		static public function fromPoint(point:Object):Position
+		static public function fromDisplayObject(object:DisplayObject):Position
+		{
+			return new Position(object.x, object.y);
+		}
+
+		static public function fromPoint(point:Point):Position
 		{
 			return new Position(point.x, point.y);
 		}
-		
+
 		public var x:Number;
 		public var y:Number;
 		
