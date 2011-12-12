@@ -125,7 +125,8 @@ package actionlib.common.utils
 				object.y += bounds.bottom - rect.bottom;
 		}
 
-		static public function createRectSprite(width:Number = 100, height:Number = 100, color:int = 0x000000, alpha:Number = 1):Sprite
+		static public function createRectSprite(width:Number = 100, height:Number = 100,
+				color:int = 0x000000, alpha:Number = 1):Sprite
 		{
 			var sprite:Sprite = new Sprite();
 
