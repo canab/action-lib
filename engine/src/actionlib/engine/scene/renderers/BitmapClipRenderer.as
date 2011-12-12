@@ -10,10 +10,8 @@ package actionlib.engine.scene.renderers
 	{
 		public static function captureClip(target:Sprite):BitmapClipRenderer
 		{
-			var prerenderer:ClipPrerenderer = new ClipPrerenderer(target);
-			prerenderer.renderAllFrames();
-
-			var renderer:BitmapClipRenderer = new BitmapClipRenderer(prerenderer.frames);
+			var frames:Vector.<BitmapFrame> = new ClipPrerenderer(target).renderAllFrames();
+			var renderer:BitmapClipRenderer = new BitmapClipRenderer(frames);
 			renderer.content.x = int(target.x);
 			renderer.content.y = int(target.y);
 
