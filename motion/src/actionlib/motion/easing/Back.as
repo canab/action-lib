@@ -2,11 +2,11 @@ package actionlib.motion.easing
 {
 	public class Back
 	{
-		static public var easeIn:Function = easeInWith();
-		static public var easeOut:Function = easeOutWith();
-		static public var easeInOut:Function = easeInOutWith();
+		public static var easeIn:Function = easeInWith();
+		public static var easeOut:Function = easeOutWith();
+		public static var easeInOut:Function = easeInOutWith();
 
-		static public function easeInWith(s:Number = 1.70158):Function
+		public static function easeInWith(s:Number = 1.70158):Function
 		{
 			return function (k:Number):Number
 			{
@@ -14,7 +14,7 @@ package actionlib.motion.easing
 			}
 		}
 
-		static public function easeOutWith(s:Number = 1.70158):Function
+		public static function easeOutWith(s:Number = 1.70158):Function
 		{
 			return function (k:Number):Number
 			{
@@ -22,7 +22,7 @@ package actionlib.motion.easing
 			}
 		}
 
-		static public function easeInOutWith(s:Number = 1.70158):Function
+		public static function easeInOutWith(s:Number = 1.70158):Function
 		{
 			s *= 1.525;
 

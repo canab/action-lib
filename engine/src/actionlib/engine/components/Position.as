@@ -8,12 +8,12 @@ package actionlib.engine.components
 
 	public class Position extends Component
 	{
-		static public function fromDisplayObject(object:DisplayObject):Position
+		public static function fromDisplayObject(object:DisplayObject):Position
 		{
 			return new Position(object.x, object.y);
 		}
 
-		static public function fromPoint(point:Point):Position
+		public static function fromPoint(point:Point):Position
 		{
 			return new Position(point.x, point.y);
 		}

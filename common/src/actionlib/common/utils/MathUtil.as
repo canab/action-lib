@@ -104,7 +104,7 @@ package actionlib.common.utils
 			return diff;
 		}
 		
-		static public function sign(num:Number):int
+		public static function sign(num:Number):int
 		{
 			if (num > 0)
 				return 1;

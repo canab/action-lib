@@ -2,7 +2,7 @@
 {
 	public class StringUtil
 	{
-		static public const EMPTY_CHARS:String = ' \t\r\n\f' + String.fromCharCode(160);
+		public static const EMPTY_CHARS:String = ' \t\r\n\f' + String.fromCharCode(160);
 
 		public static function endsWith(source:String, suffix:String):Boolean
 		{
@@ -34,7 +34,7 @@
 					: source.substr(0, 1).toLowerCase() + source.substr(1);
 		}
 
-		static public function replaceChars(source:String, characters:Array, matches:Array):String
+		public static function replaceChars(source:String, characters:Array, matches:Array):String
 		{
 			var result:String = '';
 
@@ -52,7 +52,7 @@
 		}
 
 
-		static public function isBlankString(source:String):Boolean
+		public static function isBlankString(source:String):Boolean
 		{
 			for (var i:int = 0; i <= source.length; i++)
 			{
@@ -63,7 +63,7 @@
 			return true;
 		}
 
-		static public function trim(str:String):String
+		public static function trim(str:String):String
 		{
 			if (str == null)
 				return '';
@@ -88,7 +88,7 @@
 				: '';
 		}
 
-		static public function format(str:String, ... args):String
+		public static function format(str:String, ... args):String
 		{
 			var length:int = args.length;
 			for (var i:int = 0; i < length; i++)
@@ -98,7 +98,7 @@
 			return str;
 		}
 
-		static public function extractInt(source:String):int
+		public static function extractInt(source:String):int
 		{
 			return source.match(/\d+/)[0];
 		}

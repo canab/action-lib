@@ -15,35 +15,35 @@ package actionlib.common.utils
 
 	public class DisplayUtil
 	{
-		static public function transformCoords(point:Point, source:DisplayObject, target:DisplayObject):Point
+		public static function transformCoords(point:Point, source:DisplayObject, target:DisplayObject):Point
 		{
 			return target.globalToLocal(source.localToGlobal(point));
 		}
 
-		static public function bringToFront(object:DisplayObject):void
+		public static function bringToFront(object:DisplayObject):void
 		{
 			var parent:DisplayObjectContainer = object.parent;
 			parent.setChildIndex(object, parent.numChildren - 1);
 		}
 
-		static public function sendToBack(object:DisplayObject):void
+		public static function sendToBack(object:DisplayObject):void
 		{
 			var parent:DisplayObjectContainer = object.parent;
 			parent.setChildIndex(object, 0);
 		}
 
-		static public function setScale(object:DisplayObject, scale:Number):void
+		public static function setScale(object:DisplayObject, scale:Number):void
 		{
 			object.scaleX = object.scaleY = scale;
 		}
 
-		static public function setPosition(object:DisplayObject, position:Object):void
+		public static function setPosition(object:DisplayObject, position:Object):void
 		{
 			object.x = position.x;
 			object.y = position.y
 		}
 
-		static public function removeChildren(container:DisplayObjectContainer):void
+		public static function removeChildren(container:DisplayObjectContainer):void
 		{
 			while (container.numChildren > 0)
 			{
@@ -51,12 +51,12 @@ package actionlib.common.utils
 			}
 		}
 
-		static public function detachFromDisplay(displayObject:DisplayObject):void
+		public static function detachFromDisplay(displayObject:DisplayObject):void
 		{
 			displayObject.parent.removeChild(displayObject);
 		}
 
-		static public function getChildrenBounds(container:DisplayObjectContainer):Rectangle
+		public static function getChildrenBounds(container:DisplayObjectContainer):Rectangle
 		{
 			var minX:Number = Number.MAX_VALUE;
 			var maxX:Number = Number.MIN_VALUE;
@@ -77,7 +77,7 @@ package actionlib.common.utils
 			return new Rectangle(minX, minY, maxX - minX, maxY - minY);
 		}
 
-		static public function calcBounds(objects:Array, target:DisplayObjectContainer):Rectangle
+		public static function calcBounds(objects:Array, target:DisplayObjectContainer):Rectangle
 		{
 			var minX:Number = Number.MAX_VALUE;
 			var minY:Number = Number.MAX_VALUE;
@@ -97,13 +97,13 @@ package actionlib.common.utils
 			return new Rectangle(minX, minY, maxX - minX, maxY - minY);
 		}
 
-		static public function fitToBounds(object:DisplayObject, bounds:Rectangle):void
+		public static function fitToBounds(object:DisplayObject, bounds:Rectangle):void
 		{
 			adjustScale(object, bounds.width, bounds.height);
 			claimBounds(object, bounds);
 		}
 
-		static public function adjustScale(object:DisplayObject, maxWidth:Number, maxHeight:Number):void
+		public static function adjustScale(object:DisplayObject, maxWidth:Number, maxHeight:Number):void
 		{
 			var scale:Number = Math.min(maxWidth / object.width, maxHeight / object.height);
 			object.height *= scale;
@@ -125,7 +125,7 @@ package actionlib.common.utils
 				object.y += bounds.bottom - rect.bottom;
 		}
 
-		static public function createRectSprite(width:Number = 100, height:Number = 100,
+		public static function createRectSprite(width:Number = 100, height:Number = 100,
 				color:int = 0x000000, alpha:Number = 1):Sprite
 		{
 			var sprite:Sprite = new Sprite();
@@ -137,7 +137,7 @@ package actionlib.common.utils
 			return sprite;
 		}
 
-		static public function addBoundsRect(object:Sprite, color:int = 0, alpha:Number = 0):Sprite
+		public static function addBoundsRect(object:Sprite, color:int = 0, alpha:Number = 0):Sprite
 		{
 			var bounds:Rectangle = object.getBounds(object);
 			var rect:Sprite = createRectSprite(bounds.width, bounds.height, color, alpha);
@@ -197,7 +197,7 @@ package actionlib.common.utils
 			return bitmapData.getPixel32(1, 1);
 		}
 
-		static public function getRandomPoint(area:DisplayObject):Point
+		public static function getRandomPoint(area:DisplayObject):Point
 		{
 			var bounds:Rectangle = area.getBounds(area);
 			var stepCount:int = 100;

@@ -31,7 +31,7 @@
 			navigate(url, SELF)
 		}
 
-		static public function navigate(url:String, window:String):void
+		public static function navigate(url:String, window:String):void
 		{
 			if (ExternalInterface.available)
 			{

@@ -2,11 +2,11 @@ package actionlib.motion.easing
 {
 	final public class Elastic
 	{
-		static public var easeIn:Function = easeInWith(0.1, 0.4);
-		static public var easeOut:Function = easeOutWith(0.1, 0.4);
-		static public var easeInOut:Function = easeInOutWith(0.1, 0.4);
+		public static var easeIn:Function = easeInWith(0.1, 0.4);
+		public static var easeOut:Function = easeOutWith(0.1, 0.4);
+		public static var easeInOut:Function = easeInOutWith(0.1, 0.4);
 
-		static public function easeInWith(a:Number, p:Number):Function
+		public static function easeInWith(a:Number, p:Number):Function
 		{
 			return function (k:Number):Number
 			{
@@ -35,7 +35,7 @@ package actionlib.motion.easing
 			}
 		}
 
-		static public function easeOutWith(a:Number = 0.1, p:Number = 0.4):Function
+		public static function easeOutWith(a:Number = 0.1, p:Number = 0.4):Function
 		{
 			return function (k:Number):Number
 			{
@@ -64,7 +64,7 @@ package actionlib.motion.easing
 			}
 		}
 
-		static public function easeInOutWith(a:Number, p:Number):Function
+		public static function easeInOutWith(a:Number, p:Number):Function
 		{
 			return function (k:Number):Number
 			{

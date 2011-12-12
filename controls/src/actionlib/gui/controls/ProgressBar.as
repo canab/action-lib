@@ -6,7 +6,7 @@ package actionlib.gui.controls
 
 	public class ProgressBar extends ControlBase
 	{
-		static public const LINE_NAME:String = 'mcLine';
+		public static const LINE_NAME:String = 'mcLine';
 
 		private var _line:Sprite;
 		private var _lineStartX:Number;

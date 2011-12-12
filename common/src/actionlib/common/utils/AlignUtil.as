@@ -5,12 +5,12 @@ package actionlib.common.utils
 
 	public class AlignUtil
 	{
-		static public const TOP:String = "top";
-		static public const BOTTOM:String = "bottom";
-		static public const CENTER:String = "center";
-		static public const LEFT:String = "left";
-		static public const RIGHT:String = "right";
-		static public const NONE:String = "none";
+		public static const TOP:String = "top";
+		public static const BOTTOM:String = "bottom";
+		public static const CENTER:String = "center";
+		public static const LEFT:String = "left";
+		public static const RIGHT:String = "right";
+		public static const NONE:String = "none";
 		
 		public static function align(target:DisplayObject, bounds:Rectangle, horizontal:String, vertical:String):void
 		{

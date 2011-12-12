@@ -2,21 +2,21 @@
 {
 	final public class Expo
 	{
-		static public function easeIn(k:Number):Number
+		public static function easeIn(k:Number):Number
 		{
 			return k == 0
 					? 0
 					: Math.pow(2, 10 * (k - 1));
 		}
 
-		static public function easeOut(k:Number):Number
+		public static function easeOut(k:Number):Number
 		{
 			return k == 1
 					? 1
 					: -Math.pow(2, -10 * k) + 1;
 		}
 
-		static public function easeInOut(k:Number):Number
+		public static function easeInOut(k:Number):Number
 		{
 			if (k == 0)
 				return 0;
