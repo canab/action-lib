@@ -37,7 +37,7 @@ package actionlib.engine.scene.renderers
 			_frames = frames;
 			_content.addChild(_bitmap);
 
-			if (_frames)
+			if (_frames && _frames.length > 0)
 				updateFrame();
 		}
 

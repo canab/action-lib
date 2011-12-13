@@ -7,5 +7,10 @@ package actionlib.engine.rendering
 		public var x:int;
 		public var y:int;
 		public var data:BitmapData;
+
+		public function get dataSize():int
+		{
+			return data.width * data.height * (data.transparent ? 4 : 3);
+		}
 	}
 }

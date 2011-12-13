@@ -4,21 +4,40 @@ package actionlib.engine.rendering
 	import actionlib.common.query.conditions.isAnimation;
 	import actionlib.common.query.fromDisplayTree;
 	import actionlib.common.utils.BitmapUtil;
+	import actionlib.common.utils.StringUtil;
 
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 
 	public class ClipPrerenderer implements IProcessable
 	{
+		private static var _stats:ClipPrerendererStats = new ClipPrerendererStats();
+
+		public static function resetStatistics():void
+		{
+			_stats = new ClipPrerendererStats();
+		}
+
+		public static function getStats():String
+		{
+			return _stats.getStats();
+		}
+
+		private static const LABEL_PREFIX:String = "#";
+		private static const STATE_REPEAT:String = "#-";
+		private static const STATE_NORMAL:String = "#";
+
 		private var _frames:Vector.<BitmapFrame>;
 		private var _content:Sprite;
 		private var _subClips:Array = [];
 		private var _totalFrames:int;
 		private var _currentFrame:int;
 		private var _container:Sprite = new Sprite();
+		private var _state:String = STATE_NORMAL;
 
 		public function ClipPrerenderer(sprite:Sprite, frames:Vector.<BitmapFrame> = null)
 		{
@@ -39,6 +58,8 @@ package actionlib.engine.rendering
 			fromDisplayTree(_content)
 					.where(isAnimation)
 					.apply(pushClip);
+
+			_content.addEventListener(Event.ADDED, onAdded);
 		}
 
 		private function pushClip(clip:MovieClip):void
@@ -46,11 +67,31 @@ package actionlib.engine.rendering
 			clip.gotoAndStop(1);
 			_subClips.push(clip);
 			_totalFrames = Math.max(_totalFrames, clip.totalFrames);
+			checkStateLabel(clip);
+		}
+
+		private function onAdded(event:Event):void
+		{
+			var clip:MovieClip = event.target as MovieClip;
+
+			if (!clip)
+				return;
+
+			if (_subClips.indexOf(clip) == -1)
+			{
+				_subClips.push(clip);
+				clip.gotoAndStop(1);
+			}
 		}
 
 		public function process():void
 		{
-			_frames.push(getNextFrame());
+			_frames.push(renderFrame());
+
+			if (completed)
+				_content.removeEventListener(Event.ADDED, onAdded);
+			else
+				gotoNextFrame();
 		}
 
 		public function renderAllFrames():Vector.<BitmapFrame>
@@ -63,24 +104,31 @@ package actionlib.engine.rendering
 			return _frames;
 		}
 
-		private function getNextFrame():BitmapFrame
+		private function renderFrame():BitmapFrame
 		{
-			var frame:BitmapFrame = null;
-			var bounds:Rectangle = BitmapUtil.calculateIntBounds(_container);
-
-			if (bounds.width > 0 && bounds.height > 0)
+			if (_state == STATE_REPEAT)
 			{
-				frame = new BitmapFrame();
-				var matrix:Matrix = new Matrix();
-				matrix.translate(-bounds.left, -bounds.top);
-				frame.x = bounds.left - int(_content.x);
-				frame.y = bounds.top - int(_content.y);
+				_stats.addReusedFrame();
 
-				frame.data = new BitmapData(bounds.width, bounds.height, true, 0x000000);
-				frame.data.draw(_container, matrix);
+				return (_currentFrame > 1)
+					? _frames[_frames.length - 1]
+					: null;
 			}
 
-			gotoNextFrame();
+			var bounds:Rectangle = BitmapUtil.calculateIntBounds(_container);
+			if (bounds.width == 0 || bounds.height == 0)
+				return null;
+
+			var frame:BitmapFrame = new BitmapFrame();
+			var matrix:Matrix = new Matrix();
+			matrix.translate(-bounds.left, -bounds.top);
+			frame.x = bounds.left - int(_content.x);
+			frame.y = bounds.top - int(_content.y);
+
+			frame.data = new BitmapData(bounds.width, bounds.height, true, 0x000000);
+			frame.data.draw(_container, matrix);
+
+			_stats.addRenderedFrame(frame);
 
 			return frame;
 		}
@@ -88,14 +136,32 @@ package actionlib.engine.rendering
 		private function gotoNextFrame():void
 		{
 			_currentFrame++;
-
+			
 			for each (var clip:MovieClip in _subClips)
 			{
+				if (!_content.contains(clip))
+					continue;
+
+				checkStateLabel(clip);
+
 				if (clip.currentFrame < clip.totalFrames)
 					clip.nextFrame();
 				else
 					clip.gotoAndStop(1);
 			}
+		}
+
+		private function checkStateLabel(clip:MovieClip):void
+		{
+			var label:String = clip.currentFrameLabel;
+
+			if (!label)
+				return;
+
+			if (!StringUtil.startsWith(label, LABEL_PREFIX))
+				return;
+
+			_state = label;
 		}
 
 		/*///////////////////////////////////////////////////////////////////////////////////
