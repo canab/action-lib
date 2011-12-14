@@ -1,6 +1,7 @@
 package actionlib.common.logging
 {
 	import actionlib.common.logging.adapters.TraceLogAdapter;
+	import actionlib.common.logging.formatters.PatternFormatter;
 	import actionlib.common.utils.ReflectUtil;
 
 	public class Logger
