@@ -1,5 +1,6 @@
-package actionlib.common.logging
+package actionlib.common.logging.formatters
 {
+	import actionlib.common.logging.*;
 	public class PatternFormatter implements ILogFormatter
 	{
 		public static const DEFAULT_PATTERN:String = "{level}: [{sender}] - {message}";
