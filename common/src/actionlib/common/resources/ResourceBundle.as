@@ -43,8 +43,11 @@ package actionlib.common.resources
 		private function onLoad(swfLoader:SWFLoader):void
 		{
 			_nativeLoader = swfLoader.nativeLoader;
+
+			if (_swfLoader.successful)
+				_readyEvent.dispatch();
+
 			_swfLoader = null;
-			_readyEvent.dispatch();
 		}
 
 		public function dispose():void

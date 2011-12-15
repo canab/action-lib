@@ -24,7 +24,8 @@ package actionlib.common.localization
 
 		private function onLoadComplete(loader:BinaryLoader):void
 		{
-			_bundle.messages = LocalizationManager.instance.messageConverter.convert(loader.data);
+			if (_loader.successful)
+				_bundle.messages = LocalizationManager.instance.messageConverter.convert(loader.data);
 		}
 
 	}
