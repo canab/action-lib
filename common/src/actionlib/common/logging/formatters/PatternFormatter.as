@@ -1,6 +1,7 @@
 package actionlib.common.logging.formatters
 {
-	import actionlib.common.logging.*;
+	import actionlib.common.logging.ILogFormatter;
+
 	public class PatternFormatter implements ILogFormatter
 	{
 		public static const DEFAULT_PATTERN:String = "{level}: [{sender}] - {message}";
@@ -20,6 +21,16 @@ package actionlib.common.logging.formatters
 					.replace("{level}", levelText)
 					.replace("{sender}", sender)
 					.replace("{message}", message);
+		}
+
+		public function get pattern():String
+		{
+			return _pattern;
+		}
+
+		public function set pattern(value:String):void
+		{
+			_pattern = value;
 		}
 	}
 }
