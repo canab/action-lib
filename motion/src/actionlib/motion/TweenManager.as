@@ -3,6 +3,7 @@ package actionlib.motion
 	import actionlib.motion.easing.Quad;
 	import actionlib.motion.filter.FilterProperty;
 	import actionlib.motion.properties.ScaleProperty;
+	import actionlib.motion.properties.VolumeProperty;
 
 	import flash.display.Shape;
 	import flash.events.Event;
@@ -41,6 +42,7 @@ package actionlib.motion
 
 		registerSpecialProperty("$scale", ScaleProperty);
 		registerSpecialProperty("$filter", FilterProperty);
+		registerSpecialProperty("$volume", VolumeProperty);
 
 		/*///////////////////////////////////////////////////////////////////////////////////
 		//
