@@ -11,6 +11,14 @@
 	public class MoviePlayer extends AsincCommand implements ICancelableCommand
 	{
 		static private const _players:WeakObjectMap = new WeakObjectMap(MovieClip, MoviePlayer);
+
+		static public function disposeAllClips():void
+		{
+			for each (var player:MoviePlayer in _players.getValues())
+			{
+				player.stopPlaying();
+			}
+		}
 		
 		public var clip:MovieClip;
 		public var toFrame:int;
