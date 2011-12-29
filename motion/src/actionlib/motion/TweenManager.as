@@ -340,16 +340,19 @@ package actionlib.motion
 				if (targetTweener.completed || targetTweener.removed)
 					continue;
 
-				// do not override pauses & remove empty tweens (pauses)
 				if (targetTweener.numProperties == 0)
-					continue;
-
-				targetTweener.overrideProperties(sourceProps);
-
-				if (targetTweener.numProperties == 0)
-					targetTweener.removed = true;
-				else
+				{
 					overrideChain(targetTweener, sourceProps);
+				}
+				else
+				{
+					targetTweener.overrideProperties(sourceProps);
+
+					if (targetTweener.numProperties == 0)
+						targetTweener.removed = true;
+					else
+						overrideChain(targetTweener, sourceProps);
+				}
 			}
 		}
 
