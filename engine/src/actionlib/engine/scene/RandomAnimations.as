@@ -5,13 +5,15 @@ package actionlib.engine.scene
 
 	public class RandomAnimations extends Component
 	{
+		private var _period:int;
+		private var _maxCount:int;
 		private var _items:Vector.<IClipRenderer> = new <IClipRenderer>[];
 		private var _nowPlaying:Vector.<IClipRenderer> = new <IClipRenderer>[];
-		private var _period:int;
 
-		public function RandomAnimations(period:int = 1000)
+		public function RandomAnimations(period:int = 1000, maxCount:int = 2)
 		{
 			_period = period;
+			_maxCount = maxCount;
 		}
 
 		public function addItems(renderers:Vector.<IClipRenderer> = null):void
@@ -31,11 +33,14 @@ package actionlib.engine.scene
 
 		override protected virtual function onInitialize():void
 		{
-			addDelayedCall(_period, playNext);
+			addTimer(_period, playNext);
 		}
 
 		private function playNext():void
 		{
+			if (_nowPlaying.length >= _maxCount)
+				return;
+
 			var clip:IClipRenderer = ArrayUtil.getRandomItem(_items);
 
 			if (_nowPlaying.indexOf(clip) == -1)
@@ -45,8 +50,6 @@ package actionlib.engine.scene
 				clip.currentFrame = 1;
 				clip.playForward();
 			}
-
-			addDelayedCall(_period, playNext);
 		}
 
 		private function onPlayComplete(clip:IClipRenderer):void
