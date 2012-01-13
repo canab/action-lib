@@ -62,13 +62,10 @@ package actionlib.engine.core
 			}
 		}
 
-		public function addComponent(component:Component, name:String = null):void
+		public function addComponent(component:Component):void
 		{
 			if (disposed)
 				throw new Error("Entity is disposed");
-
-			if (component.name == null)
-				component.name = name;
 
 			_components.push(component);
 

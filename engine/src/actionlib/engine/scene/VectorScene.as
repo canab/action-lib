@@ -15,12 +15,12 @@ package actionlib.engine.scene
 			_root.mouseEnabled = false;
 		}
 
-		override public function addComponent(component:Component, name:String = null):void
+		override public function addComponent(component:Component):void
 		{
 			if (component is VectorLayer)
 				_root.addChild(VectorLayer(component).content);
 
-			super.addComponent(component, name);
+			super.addComponent(component);
 		}
 
 		override public function removeComponent(component:Component):void

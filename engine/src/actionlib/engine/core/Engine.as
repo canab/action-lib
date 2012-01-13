@@ -42,14 +42,12 @@ package actionlib.engine.core
 			_logger.debug("disposed");
 		}
 
-		public function addEntity(entity:Entity, name:String = null):void
+		public function addEntity(entity:Entity):void
 		{
 			if (entityExists(entity.name))
 				throw new ItemAlreadyExistsError();
 
-			if (name)
-				entity.name = name;
-			else if (!entity.name)
+			if (!entity.name)
 				entity.name = nameManager.getUniqueName();
 
 			_entities[entity.name] = entity;
