@@ -1,11 +1,11 @@
 package actionlib.common.commands
 {
-	import actionlib.common.collections.ObjectMap;
 	import actionlib.common.errors.NullPointerError;
 
 	public class AsincMacroCommand extends AsincCommand implements ICancelableCommand
 	{
-		private var _commands:ObjectMap = new ObjectMap(IAsincCommand, Boolean);
+		private var _commands:Vector.<IAsincCommand> = new <IAsincCommand>[];
+		private var _completedCommands:Vector.<IAsincCommand> = new <IAsincCommand>[];
 
 		private var _started:Boolean = false;
 		private var _canceled:Boolean = false;
@@ -21,7 +21,7 @@ package actionlib.common.commands
 			if (!command)
 				throw new NullPointerError();
 
-			_commands[command] = false;
+			_commands.push(command);
 
 			return this;
 		}
@@ -43,28 +43,24 @@ package actionlib.common.commands
 
 			_started = true;
 
-			if (_commands.isEmpty())
+			if (_commands.length == 0)
 				add(new CallLaterCommand());
 
-			for (var command:Object in _commands)
+			for each (var command:IAsincCommand in _commands)
 			{
-				IAsincCommand(command).completeEvent.addListener(onCommandComplete);
-				IAsincCommand(command).execute();
+				command.completeEvent.addListener(onCommandComplete);
+				command.execute();
 			}
 		}
 
 		private function onCommandComplete(command:IAsincCommand):void
 		{
-			_commands[command] = true;
 			command.completeEvent.removeListener(onCommandComplete);
 
-			for each (var completed:Boolean in _commands)
-			{
-				if (!completed)
-					return;
-			}
+			_completedCommands.push(command);
 
-			complete();
+			if (_completedCommands.length == _commands.length)
+				complete();
 		}
 
 		private function complete():void
@@ -76,17 +72,24 @@ package actionlib.common.commands
 
 		public function cancel():void
 		{
-			for (var command:Object in _commands)
+			for each (var command:IAsincCommand in _commands)
 			{
-				if (command is ICancelableCommand && !_commands[command])
-				{
-					ICancelableCommand(command).completeEvent.removeListener(onCommandComplete);
+				if (isCommandCompleted(command))
+					continue;
+
+				command.completeEvent.removeListener(onCommandComplete);
+
+				if (command is ICancelableCommand)
 					ICancelableCommand(command).cancel();
-				}
 			}
 
 			_started = false;
 			_canceled = true;
+		}
+
+		public function isCommandCompleted(command:IAsincCommand):Boolean
+		{
+			return _completedCommands.indexOf(command) >= 0;
 		}
 
 		/*///////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +98,7 @@ package actionlib.common.commands
 		 //
 		 ///////////////////////////////////////////////////////////////////////////////////*/
 
-		public function get commands():ObjectMap
+		public function get commands():Vector.<IAsincCommand>
 		{
 			return _commands;
 		}
