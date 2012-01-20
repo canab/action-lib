@@ -1,6 +1,5 @@
 package actionlib.common.resources.loaders
 {
-	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
@@ -70,19 +69,21 @@ package actionlib.common.resources.loaders
 
 		override public function get progress():Number
 		{
-			return (_nativeLoader.contentLoaderInfo.bytesTotal > 0)
-				? _nativeLoader.contentLoaderInfo.bytesLoaded / _nativeLoader.contentLoaderInfo.bytesTotal
+			var info:LoaderInfo = loaderInfo;
+
+			return (info && info.bytesTotal > 0)
+				? info.bytesLoaded / info.bytesTotal
 				: 0;
 		}
 
 		public function get content():DisplayObject
 		{
-			return _nativeLoader.content;
+			return _nativeLoader ? _nativeLoader.content : null;
 		}
 
 		public function get loaderInfo():LoaderInfo
 		{
-			return _nativeLoader.contentLoaderInfo;
+			return _nativeLoader ? _nativeLoader.contentLoaderInfo : null;
 		}
 
 		public function get nativeLoader():Loader

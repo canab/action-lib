@@ -1,7 +1,7 @@
 package actionlib.gui.controls
 {
+	import actionlib.common.display.Color;
 	import actionlib.common.events.EventSender;
-	import actionlib.common.utils.ColorUtil;
 	import actionlib.common.utils.DisplayUtil;
 	import actionlib.gui.UI;
 
@@ -75,10 +75,10 @@ package actionlib.gui.controls
 
 		private function refresh():void
 		{
-			var rgb:Object = ColorUtil.toRGB(_color);
+			var color:Color = new Color(_color);
 			
 			_button.image.transform.colorTransform = new ColorTransform(
-						rgb.r / 255.0, rgb.g / 255.0, rgb.b / 255.0);
+						color.r / 255.0, color.g / 255.0, color.b / 255.0);
 		}
 
 		override protected function applyEnabled():void
