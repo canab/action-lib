@@ -25,70 +25,70 @@
         <tstamp>
             <format property="build.number" pattern="dd.MM.yy"/>
         </tstamp>
+
+	    <property name="common.output.file" value="${output.dir}/action-common-${build.number}.swc"/>
+	    <property name="motion.output.file" value="${output.dir}/action-motion-${build.number}.swc"/>
+	    <property name="engine.output.file" value="${output.dir}/action-engine-${build.number}.swc"/>
+	    <property name="controls.output.file" value="${output.dir}/action-controls-${build.number}.swc"/>
+
         <echo message="build.number: ${build.number}"/>
     </target>
 
     <target name="buildAll"
-            depends="clean, buildNumber, buildMotion, buildCommon, buildEngine, buildControls"/>
+            depends="clean, buildNumber, buildCommon, buildMotion, buildEngine, buildControls"/>
 
     <target name="buildCumulative" depends="clean, buildNumber">
 	    <echo message="build..."/>
-        <compileSWC swcName="action-lib"
+        <compileSWC swcFile="${output.dir}/action-lib.swc"
                     srcPath="../common/src,../controls/src,../engine/src,../motion/src">
         </compileSWC>
     </target>
 
     <target name="buildCommon" depends="buildNumber">
 	    <echo message="build common..."/>
-        <compileSWC swcName="common"
+        <compileSWC swcFile="${common.output.file}"
                     srcPath="../common/src"
-                    externalPath="${output.dir}">
+                    >
         </compileSWC>
     </target>
 
     <target name="buildMotion" depends="buildNumber">
 	    <echo message="build motion..."/>
-        <compileSWC swcName="motion"
+        <compileSWC swcFile="${motion.output.file}"
                     srcPath="../motion/src"
-                    externalPath="${output.dir}">
+                    >
         </compileSWC>
     </target>
 
-    <target name="buildEngine" depends="buildNumber">
+    <target name="buildEngine" depends="buildNumber, buildCommon, buildMotion">
 	    <echo message="build engine..."/>
-        <compileSWC swcName="engine"
+        <compileSWC swcFile="${engine.output.file}"
                     srcPath="../engine/src"
-                    externalPath="${output.dir}">
+                    externalPath="${common.output.file},${motion.output.file}">
         </compileSWC>
     </target>
 
-    <target name="buildControls" depends="buildNumber">
+    <target name="buildControls" depends="buildNumber, buildCommon, buildMotion">
 	    <echo message="build controls..."/>
-        <compileSWC swcName="controls"
+        <compileSWC swcFile="${controls.output.file}"
                     srcPath="../controls/src"
-                    externalPath="${output.dir}">
+                    externalPath="${common.output.file},${motion.output.file}">
         </compileSWC>
     </target>
 
     <macrodef name="compileSWC">
-        <attribute name="swcName"/>
         <attribute name="srcPath"/>
+	    <attribute name="swcFile"/>
         <attribute name="externalPath" default="."/>
         <sequential>
-            <delete>
-                <fileset dir="${output.dir}" includes="@{swcName}*.swc"/>
-            </delete>
-
-            <!--suppress AntResolveInspection -->
-            <var name="output.file" value="${output.dir}/@{swcName}-${build.number}.swc"/>
+            <delete file="@swcFile"/>
 
             <exec executable="${flex.sdk.dir}/bin/${compc.compiler}" failonerror="true">
                 <arg line="-debug=true"/>
                 <arg line="-source-path+=@{srcPath}"/>
                 <arg line="-include-sources+=@{srcPath}"/>
                 <arg line="-external-library-path+=@{externalPath}"/>
-                <!--suppress AntResolveInspection -->
-                <arg line="-output=${output.file}"/>
+                <arg line="-output=@{swcFile}"/>
             </exec>
         </sequential>
     </macrodef>
