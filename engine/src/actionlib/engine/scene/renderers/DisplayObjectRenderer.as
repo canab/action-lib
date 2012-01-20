@@ -16,36 +16,42 @@ package actionlib.engine.scene.renderers
 	{
 		private var _content:DisplayObject;
 		private var _layer:VectorLayer;
-		
+
 		private var _position:Position;
 		private var _size:Size;
 		private var _rotation:Rotation;
 		private var _renderOnFrame:Boolean = false;
-		
-		public function DisplayObjectRenderer(content:DisplayObject) 
+
+		public function DisplayObjectRenderer(content:DisplayObject)
 		{
 			if (content == null)
 				throw new NullPointerError();
-				
+
 			_content = content;
 		}
-		
-		override protected function onDispose():void 
+
+		override protected function onInitialize():void
+		{
+			if (_renderOnFrame)
+				updateRenderOnFrameState();
+		}
+
+		override protected function onDispose():void
 		{
 			layer = null;
 		}
-		
-		public function render():void 
+
+		public function render():void
 		{
 			if (_position)
 			{
 				_content.x = _position.x;
 				_content.y = _position.y;
 			}
-			
+
 			if (_rotation)
 				_content.rotation = _rotation.degrees;
-			
+
 			if (_size)
 				setSize();
 		}
@@ -55,56 +61,60 @@ package actionlib.engine.scene.renderers
 			_content.width = _size.width;
 			_content.height = _size.height;
 		}
-		
+
 		public function get layer():VectorLayer { return _layer; }
-		public function set layer(value:VectorLayer):void 
+
+		public function set layer(value:VectorLayer):void
 		{
 			if (_layer)
 				_layer.removeItem(this);
-				
+
 			_layer = value;
-			
+
 			if (_layer)
 				_layer.addItem(this);
 		}
-		
+
 		public function get position():Position { return _position; }
-		public function set position(value:Position):void 
+
+		public function set position(value:Position):void
 		{
 			_position = value;
 			render();
 		}
-		
+
 		public function get size():Size { return _size; }
-		public function set size(value:Size):void 
+
+		public function set size(value:Size):void
 		{
 			_size = value;
 			render();
 		}
-		
+
 		public function get rotation():Rotation { return _rotation; }
-		public function set rotation(value:Rotation):void 
+
+		public function set rotation(value:Rotation):void
 		{
 			_rotation = value;
 			render();
 		}
-		
-		public function setScale(scale:Number):void 
+
+		public function setScale(scale:Number):void
 		{
 			_content.scaleX = scale;
 			_content.scaleY = scale;
 		}
-		
+
 		public function get visible():Boolean
 		{
 			return _content.visible;
 		}
-		
-		public function set visible(value:Boolean):void 
+
+		public function set visible(value:Boolean):void
 		{
 			_content.visible = value;
 		}
-		
+
 		public function get content():DisplayObject { return _content; }
 
 		public function getBounds(targetContainer:Sprite = null):Rectangle
@@ -123,17 +133,24 @@ package actionlib.engine.scene.renderers
 			{
 				_renderOnFrame = value;
 
-				if (_renderOnFrame)
-				{
-					addFrameListener(render);
-					render();
-				}
-				else
-				{
-					removeProcessor(render);
-				}
+				if (isInitialized)
+					updateRenderOnFrameState();
 			}
 		}
+
+		private function updateRenderOnFrameState():void
+		{
+			if (_renderOnFrame)
+			{
+				addFrameListener(render);
+				render();
+			}
+			else
+			{
+				removeProcessor(render);
+			}
+		}
+
 	}
 
 }
