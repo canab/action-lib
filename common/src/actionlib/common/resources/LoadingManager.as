@@ -11,10 +11,6 @@ package actionlib.common.resources
 		private var _loadersQueue:Vector.<LoaderBase> = new <LoaderBase>[];
 		private var _executedLoaders:Vector.<LoaderBase> = new <LoaderBase>[];
 
-		public function LoadingManager()
-		{
-		}
-
 		public function addLoader(loader:LoaderBase):void
 		{
 			_loadersQueue.push(loader);

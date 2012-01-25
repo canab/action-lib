@@ -18,10 +18,6 @@ package actionlib.gui
 
 		private var _targets:WeakObjectMap = new WeakObjectMap(DisplayObject, TargetData);
 
-		public function ToolTipManager()
-		{
-		}
-
 		public function registerObject(target:DisplayObject, message:String, bundle:MessageBundle = null):void
 		{
 			unregisterObject(target);
@@ -132,8 +128,6 @@ package actionlib.gui
 			
 			return ui.tooltipRenderer;
 		}
-
-
 	}
 }
 

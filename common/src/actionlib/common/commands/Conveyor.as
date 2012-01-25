@@ -6,10 +6,6 @@ package actionlib.common.commands
 		private var _active:Boolean = true;
 		private var _currentItem:Object;
 		
-		public function Conveyor() 
-		{
-		}
-		
 		public function pushCall(func:Function, ...args):void
 		{
 			pushCommand(new CallFunctionCommand(func, args));

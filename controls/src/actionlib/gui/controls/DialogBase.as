@@ -9,10 +9,6 @@ package actionlib.gui.controls
 	{
 		private var _timeout:int = 0;
 
-		public function DialogBase()
-		{
-		}
-
 		public function onClose(handler:Function):DialogBase
 		{
 			closeEvent.addListener(handler);

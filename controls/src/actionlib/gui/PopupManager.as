@@ -17,10 +17,6 @@ package actionlib.gui
 		private var _relatedControl:ControlBase;
 		private var _events:EventManager = new EventManager();
 
-		public function PopupManager()
-		{
-		}
-
 		public function showPopup(control:ControlBase, relatedControl:ControlBase):void
 		{
 			if (_currentControl)

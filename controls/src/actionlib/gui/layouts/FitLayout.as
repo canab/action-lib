@@ -6,10 +6,6 @@ package actionlib.gui.layouts
 
 	public class FitLayout implements ILayout
 	{
-		public function FitLayout()
-		{
-		}
-
 		public function apply(container:Container):void
 		{
 			for each (var item:ControlBase in container.controls)

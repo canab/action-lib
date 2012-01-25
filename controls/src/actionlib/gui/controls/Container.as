@@ -10,10 +10,6 @@ package actionlib.gui.controls
 		private var _anchors:Array = [];
 		private var _layout:ILayout;
 
-		public function Container()
-		{
-		}
-
 		public function addAnchor(
 			source:Object, sourceProp:String,
 			target:Object, targetProp:String,
