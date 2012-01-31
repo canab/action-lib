@@ -39,7 +39,7 @@
 
     <target name="buildCumulative" depends="clean, buildNumber">
 	    <echo message="build..."/>
-        <compileSWC swcFile="${output.dir}/action-lib.swc"
+        <compileSWC swcFile="${output.dir}/action-lib-${build.number}.swc"
                     srcPath="../common/src,../controls/src,../engine/src,../motion/src">
         </compileSWC>
     </target>
