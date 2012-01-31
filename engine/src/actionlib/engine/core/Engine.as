@@ -1,6 +1,7 @@
 package actionlib.engine.core
 {
 	import actionlib.common.display.StageReference;
+	import actionlib.common.errors.AlreadyDisposedError;
 	import actionlib.common.errors.ItemAlreadyExistsError;
 	import actionlib.common.errors.ItemNotFoundError;
 	import actionlib.common.events.EventSender;
@@ -22,6 +23,7 @@ package actionlib.engine.core
 		private var _entities:Object = {};
 		private var _started:Boolean;
 		private var _initialized:Boolean = false;
+		private var _disposed:Boolean = false;
 		private var _context:Object;
 
 		public function Engine()
@@ -32,6 +34,9 @@ package actionlib.engine.core
 
 		public function dispose():void
 		{
+			if (_disposed)
+				throw new AlreadyDisposedError();
+
 			stop();
 
 			for each (var entity:Entity in _entities)
@@ -39,11 +44,15 @@ package actionlib.engine.core
 				entity.dispose();
 			}
 
+			_disposed = true;
 			_logger.debug("disposed");
 		}
 
 		public function addEntity(entity:Entity):void
 		{
+			if (_disposed)
+				throw new AlreadyDisposedError();
+
 			if (entityExists(entity.name))
 				throw new ItemAlreadyExistsError();
 
@@ -60,6 +69,9 @@ package actionlib.engine.core
 
 		public function removeEntity(entity:Entity):void
 		{
+			if (_disposed)
+				throw new AlreadyDisposedError();
+
 			if (!entityExists(entity.name))
 				throw new ItemNotFoundError();
 
@@ -71,6 +83,9 @@ package actionlib.engine.core
 
 		public function start():void
 		{
+			if (_disposed)
+				throw new AlreadyDisposedError();
+
 			if (_started)
 				return;
 
@@ -86,6 +101,9 @@ package actionlib.engine.core
 
 		public function stop():void
 		{
+			if (_disposed)
+				throw new AlreadyDisposedError();
+
 			if (!_started)
 				return;
 
@@ -271,6 +289,11 @@ package actionlib.engine.core
 		public function set context(value:Object):void
 		{
 			_context = value;
+		}
+
+		public function get disposed():Boolean
+		{
+			return _disposed;
 		}
 	}
 
