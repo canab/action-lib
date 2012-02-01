@@ -224,6 +224,13 @@ package actionlib.engine.core
 				removeEntity(entity);
 		}
 
+		public function removeEntityByName(name:String):void
+		{
+			var entity:Entity = getEntityByName(name);
+			if (entity)
+				removeEntity(entity);
+		}
+
 		public function getComponent(fullName:String):Component
 		{
 			var parts:Array = fullName.split(NameManager.SEPARATOR);
