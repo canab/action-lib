@@ -5,6 +5,7 @@ package actionlib.engine.scene
 
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import flash.geom.Point;
 
 	public class VectorLayer extends Component
 	{
@@ -89,6 +90,11 @@ package actionlib.engine.scene
 		public function get enableOrdering():Boolean
 		{
 			return _enableOrdering;
+		}
+
+		public function get mousePosition():Point
+		{
+			return new Point(_content.mouseX, _content.mouseY);
 		}
 
 		public function set enableOrdering(value:Boolean):void

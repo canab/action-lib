@@ -9,9 +9,9 @@ package actionlib.engine.scene
 	{
 		private var _root:Sprite;
 
-		public function VectorScene(root:Sprite)
+		public function VectorScene(root:Sprite = null)
 		{
-			_root = root;
+			_root = root || new Sprite();
 			_root.mouseEnabled = false;
 		}
 
