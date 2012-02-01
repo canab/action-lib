@@ -2,6 +2,6 @@ package actionlib.common.interfaces
 {
 	public interface IFactory
 	{
-		function createObject():*;
+		function createObject():Object;
 	}
 }
