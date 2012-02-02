@@ -4,6 +4,7 @@ package actionlib.gui.controls
 	import actionlib.gui.UI;
 
 	import flash.events.Event;
+	import flash.geom.Point;
 
 	public class DialogBase extends WindowBase
 	{
@@ -15,9 +16,9 @@ package actionlib.gui.controls
 			return this;
 		}
 
-		public function show():void
+		public function show(position:Point = null):void
 		{
-			UI.showDialog(this);
+			UI.showDialog(this, position);
 		}
 
 		protected function doDefaultAction():void
