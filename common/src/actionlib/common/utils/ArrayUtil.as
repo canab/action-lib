@@ -92,6 +92,9 @@ package actionlib.common.utils
 		
 		public static function getRandomItems(source:Object, count:int):Array
 		{
+			if (source.length < count)
+				throw new Error("Source length is less then items requested");
+			
 			var result:Array = [];
 			var selection:Array = [];
 			
