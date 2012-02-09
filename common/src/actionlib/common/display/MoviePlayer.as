@@ -16,21 +16,37 @@
 		{
 			for each (var player:MoviePlayer in _players.getValues())
 			{
-				player.stopPlaying();
+				player.cancel();
 			}
 		}
-		
-		public var clip:MovieClip;
-		public var toFrame:int;
-		public var fromFrame:int;
+
+		static public function disposeClip(clip:MovieClip):void
+		{
+			var player:MoviePlayer = _players[clip];
+			if (player)
+				player.cancel();
+		}
+
+		static public function getPlayer(clip:MovieClip):MovieClip
+		{
+			return _players[clip];
+		}
+
+		/////////////////////////////////////////////////////////////////////////////////////
+		//
+		// instance
+		//
+		/////////////////////////////////////////////////////////////////////////////////////
+
+		private var _clip:MovieClip;
+		private var _toFrame:int;
+		private var _fromFrame:int;
 		
 		public function MoviePlayer(clip:MovieClip = null, fromFrame:int = 1, toFrame:int = 0)
 		{
-			this.clip = clip;
-			this.fromFrame = fromFrame;
-			this.toFrame = (toFrame > 0)
-				? toFrame
-				: clip.totalFrames;
+			_clip = clip;
+			_fromFrame = fromFrame;
+			_toFrame = (toFrame > 0) ? toFrame : clip.totalFrames;
 		}
 
 		public function detachOnComplete():MoviePlayer
@@ -41,67 +57,73 @@
 
 		private function detachFromDisplay():void
 		{
-			DisplayUtil.detachFromDisplay(clip);
+			DisplayUtil.detachFromDisplay(_clip);
 		}
-		
-		public function play(fromFrame:int = 1, toFrame:int = 0):MoviePlayer
+
+		public function playTo(toFrame:int):void
 		{
-			this.fromFrame = fromFrame;
-			this.toFrame = (toFrame > 0)
-				? toFrame
-				: clip.totalFrames;
-			
+			play(_clip.currentFrame, toFrame);
+		}
+
+		public function play(fromFrame:int = 1, toFrame:int = 0):void
+		{
+			_fromFrame = fromFrame;
+			_toFrame = (toFrame > 0) ? toFrame : _clip.totalFrames;
+
 			execute();
-			
-			return this;
 		}
-		
-		public function playTo(toFrame:int):MoviePlayer
+
+		override public function execute():void
 		{
-			play(clip.currentFrame, toFrame);
-			return this;
+			var currentPlayer:MoviePlayer = _players[_clip];
+
+			if (currentPlayer)
+				currentPlayer.cancel();
+
+			_players[_clip] = this;
+
+			_clip.gotoAndStop(_fromFrame);
+			_clip.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
-		
+
 		private function onEnterFrame(e:Event):void
 		{
-			if (clip.currentFrame == toFrame)
+			if (_clip.currentFrame == _toFrame)
 			{
-				stopPlaying();
+				stop();
 				dispatchComplete();
 			}
-			else if (clip.currentFrame < toFrame)
+			else if (_clip.currentFrame < _toFrame)
 			{
-				clip.nextFrame();
+				_clip.nextFrame();
 			}
 			else
 			{
-				clip.prevFrame();
+				_clip.prevFrame();
 			}
 		}
-		
-		override public function execute():void
+
+		public function stop():void
 		{
-			var currentPlayer:MoviePlayer = _players[clip];
-			if (currentPlayer)
-				currentPlayer.cancel();
-			
-			_players[clip] = this;
-			
-			clip.gotoAndStop(fromFrame);
-			clip.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			cancel();
 		}
-		
+
 		public function cancel():void
 		{
-			stopPlaying();
+			_clip.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			_players.removeKey(_clip);
 		}
-		
-		private function stopPlaying():void 
+
+		/////////////////////////////////////////////////////////////////////////////////////
+		//
+		// get/set
+		//
+		/////////////////////////////////////////////////////////////////////////////////////
+
+		public function get clip():MovieClip
 		{
-			clip.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			_players.removeKey(clip);
+			return _clip;
 		}
-		
 	}
 
 }
