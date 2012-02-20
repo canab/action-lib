@@ -130,10 +130,10 @@ package actionlib.common.query
 				if (!_condition(item))
 					continue;
 
-				if (result.indexOf(item) >= 0)
-					continue;
+				var mappedItem:* = _mapper(item);
 
-				result.push(_mapper(item));
+				if (result.indexOf(mappedItem) == -1)
+					result.push(mappedItem);
 			}
 
 			return result;

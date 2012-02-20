@@ -15,16 +15,16 @@ package actionlib.common.query.iterators
 
 		public function ButtonIterator(target:SimpleButton)
 		{
-			addItems(target.overState);
 			addItems(target.upState);
 			addItems(target.overState);
+			addItems(target.downState);
 		}
 
 		private function addItems(state:DisplayObject):void
 		{
 			_items.push(state);
 
-			if (_items is DisplayObjectContainer)
+			if (state is DisplayObjectContainer)
 				fromDisplayTree(DisplayObjectContainer(state)).apply(_items.push);
 		}
 
@@ -35,7 +35,7 @@ package actionlib.common.query.iterators
 
 		override flash_proxy function nextValue(index:int):*
 		{
-			return _items.getChildAt(_index++);
+			return _items[_index++];
 		}
 	}
 }
