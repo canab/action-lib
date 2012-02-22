@@ -60,6 +60,16 @@
 			DisplayUtil.detachFromDisplay(_clip);
 		}
 
+		public function playToEnd():void
+		{
+			play(_clip.currentFrame, _clip.totalFrames);
+		}
+
+		public function playToStart():void
+		{
+			play(_clip.currentFrame, 1);
+		}
+
 		public function playTo(toFrame:int):void
 		{
 			play(_clip.currentFrame, toFrame);
@@ -112,6 +122,11 @@
 		{
 			_clip.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			_players.removeKey(_clip);
+		}
+
+		public function onPlayComplete(handler:Function):MoviePlayer
+		{
+			return MoviePlayer(onComplete(handler));
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////
