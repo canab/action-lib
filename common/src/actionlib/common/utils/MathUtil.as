@@ -4,9 +4,12 @@ package actionlib.common.utils
 
 	public class MathUtil
 	{
+		public static var TO_RADIANS:Number = Math.PI / 180;
+		public static var TO_DEGREES:Number = 180 / Math.PI;
+
 		private static var _PI:Number = Math.PI;
 		private static var _2PI:Number = 2 * Math.PI;
-		
+
 		public function MathUtil()
 		{
 			super();
@@ -37,7 +40,12 @@ package actionlib.common.utils
 
 		public static function radiansToDegrees(radians:Number):Number
 		{
-			return radians / _PI * 180;
+			return radians * TO_DEGREES;
+		}
+
+		public static function DegreesToRadians(radians:Number):Number
+		{
+			return radians * TO_RADIANS;
 		}
 
 		/**
