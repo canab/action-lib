@@ -8,6 +8,24 @@ package actionlib.engine.core
 
 	public class Entity
 	{
+		public static function fromComponents(...args):Entity
+		{
+			var entity:Entity = new Entity();
+
+			for each (var component:Component in args)
+			{
+				entity.addComponent(component);
+			}
+
+			return entity;
+		}
+
+		/////////////////////////////////////////////////////////////////////////////////////
+		//
+		// instance
+		//
+		/////////////////////////////////////////////////////////////////////////////////////
+
 		public var name:String;
 		
 		internal var initialized:Boolean = false;

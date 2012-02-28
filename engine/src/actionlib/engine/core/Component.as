@@ -18,7 +18,7 @@ package actionlib.engine.core
 			super();
 		}
 		
-		internal function initialize():void 
+		internal function initialize():void
 		{
 			if (initialized)
 				throw new AlreadyInitializedError();
