@@ -44,8 +44,15 @@ package actionlib.engine.scene
 		{
 			enabled = _enabled;
 		}
-		
-		private function onMouseDown(e:MouseEvent):void 
+
+		override protected virtual function onDispose():void
+		{
+			_content.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			_content.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			_content.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		}
+
+		private function onMouseDown(e:MouseEvent):void
 		{
 			startDrag();
 		}
