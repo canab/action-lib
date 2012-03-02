@@ -6,7 +6,7 @@ package actionlib.common.query.conditions
 		{
 			return item
 				&& item.hasOwnProperty(propName)
-				&& item.name == value;
+				&& item[propName] == value;
 		};
 	}
 }
