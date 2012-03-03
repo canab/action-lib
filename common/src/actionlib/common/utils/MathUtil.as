@@ -57,7 +57,7 @@ package actionlib.common.utils
 			var dy:Number = endPoint.y - startPoint.y;
 
 			if (dx == 0)
-				return (dy > 0) ? -_PI : _PI;
+				return (dy > 0) ? 0.5 * _PI : -0.5 * _PI;
 			else
 				return Math.atan2(dy,  dx);
 		}
