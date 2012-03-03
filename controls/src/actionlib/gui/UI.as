@@ -69,6 +69,11 @@ package actionlib.gui
 			instance.windowManager.showAllWindows();
 		}
 
+		public static function activateWindow(window:WindowBase):void
+		{
+			instance.windowManager.activateWindow(window);
+		}
+
 		public static function get activeWindow():WindowBase
 		{
 			return instance.windowManager.activeWindow;

@@ -29,6 +29,7 @@ package actionlib.engine.scene.renderers
 
 		private var _frames:Vector.<BitmapFrame>;
 		private var _bitmap:Bitmap = new Bitmap();
+		private var _smoothing:Boolean = false;
 
 		public function BitmapClipRenderer(frames:Vector.<BitmapFrame> = null)
 		{
@@ -50,6 +51,9 @@ package actionlib.engine.scene.renderers
 				_bitmap.bitmapData = frame.data;
 				_bitmap.x = frame.x;
 				_bitmap.y = frame.y;
+
+				if (_smoothing)
+					_bitmap.smoothing = true;
 			}
 			else
 			{
@@ -63,10 +67,9 @@ package actionlib.engine.scene.renderers
 		//
 		///////////////////////////////////////////////////////////////////////////////////*/
 
-		public function get frames():Vector.<BitmapFrame>
-		{
-			return _frames;
-		}
+		public function get bitmap():Bitmap { return _bitmap; }
+
+		public function get frames():Vector.<BitmapFrame> { return _frames; }
 
 		public function set frames(value:Vector.<BitmapFrame>):void
 		{
@@ -75,14 +78,19 @@ package actionlib.engine.scene.renderers
 			updateFrame();
 		}
 
-		public function get bitmap():Bitmap
-		{
-			return _bitmap;
-		}
-
 		override public function get totalFrames():int
 		{
 			return _frames.length;
+		}
+
+		public function get smoothing():Boolean { return _smoothing; }
+
+		public function set smoothing(value:Boolean):void
+		{
+			_smoothing = value;
+
+			if (_bitmap)
+				_bitmap.smoothing = value;
 		}
 	}
 }

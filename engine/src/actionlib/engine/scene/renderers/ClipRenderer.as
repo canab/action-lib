@@ -29,6 +29,12 @@ package actionlib.engine.scene.renderers
 				addFrameListener(handlePlaying);
 		}
 
+		public function onPlayComplete(listener:Function):ClipRenderer
+		{
+			_playCompleteEvent.addListener(listener);
+			return this;
+		}
+
 		public function removeOnComplete():void
 		{
 			_playCompleteEvent.addListener(removeSelf)
