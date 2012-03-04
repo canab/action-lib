@@ -19,7 +19,7 @@ package actionlib.engine.core
 			_frameDispatcher.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 
-		private function onEnterFrame(e:Event):void
+		internal function onEnterFrame(e:Event):void
 		{
 			var processor:ProcessorBase = _head;
 

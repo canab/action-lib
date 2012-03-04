@@ -4,6 +4,7 @@ package actionlib.engine.core
 	import actionlib.common.errors.AlreadyDisposedError;
 	import actionlib.common.errors.ItemAlreadyExistsError;
 	import actionlib.common.errors.ItemNotFoundError;
+	import actionlib.common.errors.NotInitializedError;
 	import actionlib.common.events.EventSender;
 	import actionlib.common.logging.Logger;
 	import actionlib.motion.TweenManager;
@@ -97,6 +98,20 @@ package actionlib.engine.core
 			_tweenManager.resumeAll();
 			_logger.debug("started");
 			_startEvent.dispatch();
+		}
+
+		public function doStepsForce(stepsCount:int = 1):void
+		{
+			if (_disposed)
+				throw new AlreadyDisposedError();
+
+			if (!_initialized)
+				throw new NotInitializedError();
+
+			for (var i:int = 0; i < stepsCount; i++)
+			{
+				_processManager.onEnterFrame(null);
+			}
 		}
 
 		public function stop():void
