@@ -15,21 +15,32 @@ package actionlib.engine.rendering
 
 	public class ClipPrerenderer implements IProcessable
 	{
-		private static var _stats:ClipPrerendererStats = new ClipPrerendererStats();
+		private static var _renderStats:RenderStats = new RenderStats();
 
 		public static function resetStatistics():void
 		{
-			_stats = new ClipPrerendererStats();
+			_renderStats = new RenderStats();
 		}
 
-		public static function getStats():String
+		public static function getTotalStats():String
 		{
-			return _stats.getStats();
+			return _renderStats.getTotalStats();
+		}
+
+		public static function getDetailedStats():String
+		{
+			return _renderStats.getDetailedStats();
 		}
 
 		private static const LABEL_PREFIX:String = "#";
 		private static const STATE_REPEAT:String = "#-";
 		private static const STATE_NORMAL:String = "#";
+
+		/////////////////////////////////////////////////////////////////////////////////////
+		//
+		// instance
+		//
+		/////////////////////////////////////////////////////////////////////////////////////
 
 		private var _frames:Vector.<BitmapFrame>;
 		private var _content:Sprite;
@@ -38,12 +49,15 @@ package actionlib.engine.rendering
 		private var _currentFrame:int;
 		private var _container:Sprite = new Sprite();
 		private var _state:String = STATE_NORMAL;
+		private var _stat:StatRecord;
 
 		public function ClipPrerenderer(sprite:Sprite, frames:Vector.<BitmapFrame> = null)
 		{
 			_content = sprite;
 			_frames = frames ? frames : new <BitmapFrame>[];
 			_container.addChild(_content);
+			_stat = _renderStats.getRecord(String(_content) + " " + _content.name);
+
 			initialize();
 		}
 
@@ -108,7 +122,7 @@ package actionlib.engine.rendering
 		{
 			if (_state == STATE_REPEAT)
 			{
-				_stats.addReusedFrame();
+				_stat.addReusedFrame();
 
 				return (_currentFrame > 1)
 					? _frames[_frames.length - 1]
@@ -128,7 +142,7 @@ package actionlib.engine.rendering
 			frame.data = new BitmapData(bounds.width, bounds.height, true, 0x000000);
 			frame.data.draw(_container, matrix);
 
-			_stats.addRenderedFrame(frame);
+			_stat.addRenderedFrame(frame);
 
 			return frame;
 		}
