@@ -32,9 +32,9 @@ package actionlib.engine.components
 			return new Point(x, y);
 		}
 		
-		public function toString():String
+		override public function toString():String
 		{
-			return "[Position: (" + x + "; " + y + ")]"
+			return "Position[" + x + ", " + y + "]";
 		}
 		
 	}

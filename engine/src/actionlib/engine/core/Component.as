@@ -3,6 +3,7 @@ package actionlib.engine.core
 	import actionlib.common.errors.AlreadyDisposedError;
 	import actionlib.common.errors.AlreadyInitializedError;
 	import actionlib.common.errors.NotInitializedError;
+	import actionlib.common.utils.ReflectUtil;
 
 	public class Component
 	{
@@ -24,7 +25,7 @@ package actionlib.engine.core
 				throw new AlreadyInitializedError();
 			
 			if (!name)
-				name = engine.nameManager.getUniqueName();
+				name = ReflectUtil.getClassName(this) + engine.nameManager.getUniqueName();
 
 			initialized = true;
 			
@@ -123,6 +124,11 @@ package actionlib.engine.core
 		public function removeSelf():void
 		{
 			parent.removeComponent(this);
+		}
+
+		public function toString():String
+		{
+			return ReflectUtil.getClassName(this) + "[" + fullName + "]";
 		}
 	}
 

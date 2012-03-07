@@ -7,6 +7,7 @@ package actionlib.engine.core
 	import actionlib.common.errors.ItemNotFoundError;
 	import actionlib.common.errors.NotInitializedError;
 	import actionlib.common.events.EventSender;
+	import actionlib.common.utils.ReflectUtil;
 
 	public class Entity
 	{
@@ -208,7 +209,7 @@ package actionlib.engine.core
 
 		public function toString():String
 		{
-			return "Entity[" + name + "]";
+			return ReflectUtil.getClassName(this) + "[" + name + "]";
 		}
 	}
 
