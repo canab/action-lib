@@ -54,9 +54,6 @@ package actionlib.engine.core
 			if (_disposed)
 				throw new AlreadyDisposedError();
 
-			if (entityExists(entity.name))
-				throw new ItemAlreadyExistsError();
-
 			if (!entity.name)
 				entity.name = nameManager.getUniqueName();
 

@@ -35,9 +35,10 @@ package actionlib.engine.scene.renderers
 			return this;
 		}
 
-		public function removeOnComplete():void
+		public function removeOnComplete():ClipRenderer
 		{
-			_playCompleteEvent.addListener(removeSelf)
+			_playCompleteEvent.addListener(removeSelf);
+			return this;
 		}
 
 		public function play():void
