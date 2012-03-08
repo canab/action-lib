@@ -1,14 +1,17 @@
 package actionlib.common.logging
 {
+	import actionlib.common.collections.WeakObjectMap;
 	import actionlib.common.logging.adapters.TraceLogAdapter;
 	import actionlib.common.logging.formatters.PatternFormatter;
 	import actionlib.common.utils.ReflectUtil;
 
 	public class Logger
 	{
+		internal static var loggers:WeakObjectMap = new WeakObjectMap(Logger);
+
 		private static var _defaultAdapter:ILogAdapter;
 		private static var _defaultFormatter:ILogFormatter;
-		private static var _defaultLevel:int = LogLevels.DEBUG;
+		private static var _defaultLevel:LogLevel = LogLevel.DEBUG;
 		private static var _defaultLogger:Logger;
 		private static var _config:LoggerConfig = new LoggerConfig();
 
@@ -37,9 +40,15 @@ package actionlib.common.logging
 			_config.setProperties(properties);
 		}
 
-		public static function setLevel(loggerName:String, level:int):void
+		/**
+		 * Set level for the given logger or group of loggers
+		 * @param logger
+		 * can be full class name as String or Class
+		 * @param level
+		 */
+		public static function setLevel(logger:*, level:LogLevel):void
 		{
-			_config.setLevel(loggerName, level);
+			_config.setLevel(logger, level);
 		}
 
 		public static function get defaultAdapter():ILogAdapter
@@ -84,27 +93,25 @@ package actionlib.common.logging
 			_defaultLogger = value;
 		}
 
-		public static function get defaultLevel():int
+		public static function get defaultLevel():LogLevel
 		{
 			return _defaultLevel;
 		}
 
-		public static function set defaultLevel(value:int):void
+		public static function set defaultLevel(value:LogLevel):void
 		{
 			_defaultLevel = value;
 		}
 
-		/*///////////////////////////////////////////////////////////////////////////////////
-		 //
-		 // instance
-		 //
-		 ///////////////////////////////////////////////////////////////////////////////////*/
+
+		//-- instance --//
+
 
 		private var _name:String;
 		private var _sender:Object;
 		private var _adapter:ILogAdapter;
 		private var _formatter:ILogFormatter;
-		private var _level:int = defaultLevel;
+		private var _level:LogLevel = defaultLevel;
 
 		public function Logger(sender:Object)
 		{
@@ -115,30 +122,32 @@ package actionlib.common.logging
 					: ReflectUtil.getFullName(sender);
 
 			_level = _config.getLevel(_name);
+
+			loggers[this] = this;
 		}
 
 		public function debug(...args):void
 		{
-			if (_level <= LogLevels.DEBUG)
-				print(LogLevels.DEBUG, joinArgs(args));
+			if (_level <= LogLevel.DEBUG)
+				print(LogLevel.DEBUG, joinArgs(args));
 		}
 
 		public function info(...args):void
 		{
-			if (_level <= LogLevels.INFO)
-				print(LogLevels.INFO, joinArgs(args));
+			if (_level <= LogLevel.INFO)
+				print(LogLevel.INFO, joinArgs(args));
 		}
 
 		public function warn(...args):void
 		{
-			if (_level <= LogLevels.WARN)
-				print(LogLevels.WARN, joinArgs(args));
+			if (_level <= LogLevel.WARN)
+				print(LogLevel.WARN, joinArgs(args));
 		}
 
 		public function error(...args):void
 		{
-			if (_level <= LogLevels.ERROR)
-				print(LogLevels.ERROR, joinArgs(args));
+			if (_level <= LogLevel.ERROR)
+				print(LogLevel.ERROR, joinArgs(args));
 		}
 
 		private function joinArgs(args:Array):String
@@ -146,22 +155,15 @@ package actionlib.common.logging
 			return args.join(" ");
 		}
 
-		protected function print(level:int, message:String):void
+		protected function print(level:LogLevel, message:String):void
 		{
-			var levelName:String = LogLevels.getName(level);
-			var senderName:String = String(_sender)
-					.replace(/\[object (.+)]$/, "$1")
-					.replace(/\[class (.+)]$/, "$1");
-
-			var text:String = formatter.format(senderName, levelName, message);
+			var text:String = formatter.format(_sender, level, message);
 			adapter.print(_sender, level, text);
 		}
 
-		/*///////////////////////////////////////////////////////////////////////////////////
-		 //
-		 // get/set
-		 //
-		 ///////////////////////////////////////////////////////////////////////////////////*/
+
+		//-- get/set --//
+
 
 		public function get adapter():ILogAdapter
 		{
@@ -189,14 +191,19 @@ package actionlib.common.logging
 			_formatter = value;
 		}
 
-		public function get level():int
+		public function get level():LogLevel
 		{
 			return _level;
 		}
 
-		public function set level(value:int):void
+		public function set level(value:LogLevel):void
 		{
 			_level = value;
+		}
+
+		public function get name():String
+		{
+			return _name;
 		}
 	}
 }

@@ -1,12 +1,14 @@
 package actionlib.engine.core
 {
+	import actionlib.common.commands.CallFunctionCommand;
+	import actionlib.common.commands.ICommand;
 	import actionlib.common.display.StageReference;
 	import actionlib.common.errors.AlreadyDisposedError;
-	import actionlib.common.errors.ItemAlreadyExistsError;
-	import actionlib.common.errors.ItemNotFoundError;
+	import actionlib.common.errors.AlreadyInitializedError;
 	import actionlib.common.errors.NotInitializedError;
 	import actionlib.common.events.EventSender;
 	import actionlib.common.logging.Logger;
+	import actionlib.common.utils.ArrayUtil;
 	import actionlib.motion.TweenManager;
 	import actionlib.motion.Tweener;
 
@@ -16,16 +18,19 @@ package actionlib.engine.core
 
 		private var _logger:Logger = new Logger(this);
 
-		private var _startEvent:EventSender = new EventSender(this);
-		private var _stopEvent:EventSender = new EventSender(this);
+		private var _resumeEvent:EventSender = new EventSender(this);
+		private var _pauseEvent:EventSender = new EventSender(this);
 
 		private var _processManager:ProcessManager;
 		private var _tweenManager:TweenManager;
-		private var _entities:Object = {};
-		private var _started:Boolean;
+		private var _entities:Vector.<Entity> = new <Entity>[];
+		private var _paused:Boolean = true;
 		private var _initialized:Boolean = false;
 		private var _disposed:Boolean = false;
 		private var _context:Object;
+
+		private var _postProcessingCommands:Array = [];
+		private var _processingState:Boolean;
 
 		public function Engine()
 		{
@@ -33,113 +38,109 @@ package actionlib.engine.core
 			_tweenManager = new TweenManager();
 		}
 
-		public function dispose():void
-		{
-			if (_disposed)
-				throw new AlreadyDisposedError();
 
-			stop();
+		//-- initialization --//
+
+
+		public function initialize():void
+		{
+			if (_initialized)
+				throw new AlreadyInitializedError();
+
+			_processingState = true;
 
 			for each (var entity:Entity in _entities)
 			{
-				entity.dispose();
+				entity.initialize();
 			}
 
-			_disposed = true;
-			_logger.debug("disposed");
+			_processingState = false;
+
+			_initialized = true;
+
+			processPostCommands();
+			resume();
 		}
 
-		public function addEntity(entity:Entity):void
+		public function dispose():void
 		{
-			if (_disposed)
-				throw new AlreadyDisposedError();
-
-			if (!entity.name)
-				entity.name = nameManager.getUniqueName();
-
-			_entities[entity.name] = entity;
-
-			entity.engine = this;
-
-			if (_initialized)
-				entity.initialize();
-		}
-
-		public function removeEntity(entity:Entity):void
-		{
-			if (_disposed)
-				throw new AlreadyDisposedError();
-
-			if (!entityExists(entity.name))
-				throw new ItemNotFoundError();
-
-			if (_initialized)
-				entity.dispose();
-
-			delete _entities[entity.name];
-		}
-
-		public function start():void
-		{
-			if (_disposed)
-				throw new AlreadyDisposedError();
-
-			if (_started)
-				return;
-
-			if (!_initialized)
-				initialize();
-
-			_started = true;
-			_processManager.start();
-			_tweenManager.resumeAll();
-			_logger.debug("started");
-			_startEvent.dispatch();
-		}
-
-		public function doStepsForce(stepsCount:int = 1):void
-		{
-			if (_disposed)
-				throw new AlreadyDisposedError();
-
 			if (!_initialized)
 				throw new NotInitializedError();
 
-			for (var i:int = 0; i < stepsCount; i++)
-			{
-				_processManager.onEnterFrame(null);
-			}
-		}
-
-		public function stop():void
-		{
 			if (_disposed)
 				throw new AlreadyDisposedError();
 
-			if (!_started)
-				return;
+			_processingState = true;
 
-			_started = false;
-			_processManager.stop();
-			_tweenManager.pauseAll();
-			_logger.debug("stopped");
-			_stopEvent.dispatch();
-		}
-
-		private function initialize():void
-		{
 			for each (var entity:Entity in _entities)
 			{
-				entity.initialize();
+				entity.dispose();
 			}
 
-			_initialized = true;
+			_processingState = false;
+
+			processPostCommands();
+
+			_processManager.stop();
+			_tweenManager.removeAll();
+			_disposed = true;
+
+			_logger.debug("disposed");
 		}
 
-		public function tween(target:Object, duration:Number = -1):Tweener
+		private function processPostCommands():void
 		{
-			return _tweenManager.tween(target, duration);
+			for each (var command:ICommand in _postProcessingCommands)
+			{
+				command.execute();
+			}
+			_postProcessingCommands.length = 0;
 		}
+
+		private function ensureIsReady():void
+		{
+			if (!_initialized)
+				throw new NotInitializedError();
+
+			if (_disposed)
+				throw new AlreadyDisposedError();
+		}
+
+
+		//-- state --//
+
+
+		public function pause():void
+		{
+			ensureIsReady();
+
+			if (_paused)
+				return;
+
+			_paused = true;
+			_processManager.stop();
+			_tweenManager.pauseAll();
+			_logger.debug("paused");
+			_pauseEvent.dispatch();
+		}
+
+		public function resume():void
+		{
+			ensureIsReady();
+
+			if (!_paused)
+				return;
+
+			_paused = false;
+			_processManager.start();
+			_tweenManager.resumeAll();
+			_logger.debug("resumed");
+			_resumeEvent.dispatch();
+		}
+
+
+		//-- processing --//
+
 
 		internal function addFrameListener(component:Component, method:Function):void
 		{
@@ -198,15 +199,66 @@ package actionlib.engine.core
 			return Boolean(_processManager.findProcessor(component, method));
 		}
 
-		public function getEntitiesByType(type:Class):Array
+		public function doStepsForce(stepsCount:int = 1):void
 		{
-			var result:Array = [];
-			for each (var item:Entity in _entities)
+			if (!_initialized)
+				throw new NotInitializedError();
+
+			if (_disposed)
+				throw new AlreadyDisposedError();
+
+			for (var i:int = 0; i < stepsCount; i++)
 			{
-				if (item is type)
-					result.push(item);
+				_processManager.onEnterFrame(null);
 			}
-			return result;
+		}
+
+		public function tween(target:Object, duration:Number = -1):Tweener
+		{
+			return _tweenManager.tween(target, duration);
+		}
+
+
+		//-- entities --//
+
+
+		public function addEntity(entity:Entity):void
+		{
+			if (_disposed)
+				throw new AlreadyDisposedError();
+
+			if (_processingState)
+			{
+				_postProcessingCommands.push(new CallFunctionCommand(addEntity, arguments));
+				return;
+			}
+
+			if (!entity.name)
+				entity.name = nameManager.getUniqueName();
+
+			_entities.push(entity);
+
+			entity.engine = this;
+
+			if (_initialized)
+				entity.initialize();
+		}
+
+		public function removeEntity(entity:Entity):void
+		{
+			if (_disposed)
+				throw new AlreadyDisposedError();
+
+			if (_processingState)
+			{
+				_postProcessingCommands.push(new CallFunctionCommand(removeEntity, arguments));
+				return;
+			}
+
+			if (_initialized)
+				entity.dispose();
+
+			ArrayUtil.removeItemSafe(_entities, entity);
 		}
 
 		public function getEntityByType(type:Class):Entity
@@ -217,6 +269,17 @@ package actionlib.engine.core
 					return item;
 			}
 			return null;
+		}
+
+		public function getEntitiesByType(type:Class):Array
+		{
+			var result:Array = [];
+			for each (var item:Entity in _entities)
+			{
+				if (item is type)
+					result.push(item);
+			}
+			return result;
 		}
 
 		public function getEntityByName(name:String):Entity
@@ -256,64 +319,38 @@ package actionlib.engine.core
 				: null;
 		}
 
-		private function entityExists(name:String):Boolean
-		{
-			return name && (name in _entities);
-		}
 
-		/*///////////////////////////////////////////////////////////////////////////////////
-		//
-		// get/set
-		//
-		///////////////////////////////////////////////////////////////////////////////////*/
+		//-- get/set --//
+
 
 		public function get frameRate():int
 		{
 			return StageReference.stage.frameRate;
 		}
 
-		public function get started():Boolean
-		{
-			return _started;
-		}
+		public function get paused():Boolean { return _paused; }
 
-		public function set started(value:Boolean):void
+		public function set paused(value:Boolean):void
 		{
 			if (value)
-				start();
+				pause();
 			else
-				stop();
+				resume();
 		}
 
-		public function get startEvent():EventSender
-		{
-			return _startEvent;
-		}
+		public function get pauseEvent():EventSender { return _pauseEvent; }
 
-		public function get stopEvent():EventSender
-		{
-			return _stopEvent;
-		}
+		public function get resumeEvent():EventSender { return _resumeEvent; }
 
-		public function get tweenManager():TweenManager
-		{
-			return _tweenManager;
-		}
+		public function get tweenManager():TweenManager { return _tweenManager; }
 
-		public function get context():Object
-		{
-			return _context;
-		}
+		public function get context():Object { return _context; }
 
-		public function set context(value:Object):void
-		{
-			_context = value;
-		}
+		public function set context(value:Object):void { _context = value; }
 
-		public function get disposed():Boolean
-		{
-			return _disposed;
-		}
+		public function get initialized():Boolean { return _initialized; }
+
+		public function get disposed():Boolean { return _disposed; }
 	}
 
 }

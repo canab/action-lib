@@ -109,14 +109,14 @@ package actionlib.engine.core
 
 		public function addComponent(component:Component):void
 		{
+			if (disposed)
+				throw new Error("Entity is disposed");
+
 			if (_processingState)
 			{
 				_postProcessingCommands.push(new CallFunctionCommand(addComponent, arguments));
 				return;
 			}
-
-			if (disposed)
-				throw new Error("Entity is disposed");
 
 			_components.push(component);
 
@@ -134,15 +134,15 @@ package actionlib.engine.core
 		
 		public function removeComponent(component:Component):void 
 		{
+			if (disposed)
+				throw new AlreadyDisposedError();
+
 			if (_processingState)
 			{
 				_postProcessingCommands.push(new CallFunctionCommand(removeComponent, arguments));
 				return;
 			}
 
-			if (disposed)
-				throw new AlreadyDisposedError();
-				
 			component.dispose();
 			component.parent = null;
 			component.engine = null;

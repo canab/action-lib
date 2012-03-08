@@ -1,6 +1,7 @@
 package actionlib.common.logging.formatters
 {
 	import actionlib.common.logging.ILogFormatter;
+	import actionlib.common.logging.LogLevel;
 
 	public class PatternFormatter implements ILogFormatter
 	{
@@ -13,13 +14,17 @@ package actionlib.common.logging.formatters
 			_pattern = pattern || DEFAULT_PATTERN;
 		}
 
-		public function format(sender:String, level:String, message:String):String
+		public function format(sender:Object, level:LogLevel, message:String):String
 		{
-			var levelText:String = (level.length == 4 ? " " : "") + level;
+			var levelText:String = (level.name.length == 4 ? " " : "") + level;
+
+			var senderName:String = String(sender)
+					.replace(/\[object (.+)]$/, "$1")
+					.replace(/\[class (.+)]$/, "$1");
 
 			return _pattern
 					.replace("{level}", levelText)
-					.replace("{sender}", sender)
+					.replace("{sender}", senderName)
 					.replace("{message}", message);
 		}
 

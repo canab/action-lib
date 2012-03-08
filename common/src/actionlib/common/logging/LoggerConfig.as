@@ -1,37 +1,71 @@
 package actionlib.common.logging
 {
+	import actionlib.common.collections.StringMap;
+	import actionlib.common.utils.ReflectUtil;
+	import actionlib.common.utils.StringUtil;
+
 	internal class LoggerConfig
 	{
-		private var _properties:Object = {};
+		private var _properties:StringMap = new StringMap(LogLevel);
 
 		public function setProperties(properties:Object):void
 		{
-			_properties = properties || {};
+			for (var key:String in properties)
+			{
+				setLevel(key, LogLevel.getLevel(properties[key]));
+			}
 		}
 
-		public function setLevel(loggerName:String, level:int):void
+		public function setLevel(logger:*, level:LogLevel):void
 		{
-			_properties[loggerName] = LogLevels.getName(level);
+			var loggerName:String = (logger is Class)
+					? ReflectUtil.getFullName(logger)
+					: String(logger).replace("::", ".");
+
+			overrideRecords(loggerName, level);
+			applyLevel(loggerName, level)
 		}
 
-		public function getLevel(loggerName:String):int
+		private function overrideRecords(loggerName:String, level:LogLevel):void
+		{
+			for each (var key:String in _properties.getKeys())
+			{
+				if (StringUtil.startsWith(key, loggerName))
+					_properties.removeKey(key);
+			}
+			_properties[loggerName] = level;
+		}
+
+		private function applyLevel(loggerName:String, level:LogLevel):void
+		{
+			for each (var logger:Logger in Logger.loggers)
+			{
+				if (StringUtil.startsWith(logger.name, loggerName))
+					logger.level = level;
+			}
+		}
+
+		public function getLevel(loggerName:String):LogLevel
 		{
 			var maxLength:int = 0;
-			var levelName:String = null;
+			var level:LogLevel;
 
 			for (var key:String in _properties)
 			{
 				if (key.length > maxLength && loggerName.indexOf(key) == 0)
 				{
-					levelName = _properties[key];
+					level = _properties[key];
 					maxLength = key.length;
 				}
 			}
 
-			if (!levelName)
-				levelName = _properties.root;
+			if (!level)
+				level = _properties.root;
 
-			return (levelName) ? LogLevels.getLevel(levelName) : Logger.defaultLevel;
+			if (!level)
+				level = Logger.defaultLevel;
+
+			return level;
 		}
 	}
 }

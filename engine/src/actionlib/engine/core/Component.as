@@ -75,9 +75,7 @@ package actionlib.engine.core
 		 */
 		protected function addFrameListener(method:Function):void
 		{
-			if (!initialized)
-				throw new NotInitializedError();
-
+			ensureIsReady();
 			engine.addFrameListener(this, method);
 		}
 
@@ -88,9 +86,7 @@ package actionlib.engine.core
 		 */
 		protected function addDelayedCall(time:int, method:Function):void
 		{
-			if (!initialized)
-				throw new NotInitializedError();
-
+			ensureIsReady();
 			engine.addDelayedCall(time, this, method);
 		}
 
@@ -101,9 +97,7 @@ package actionlib.engine.core
 		 */
 		protected function addTimer(time:int, method:Function):void
 		{
-			if (!initialized)
-				throw new NotInitializedError();
-
+			ensureIsReady();
 			engine.addTimer(time, this, method);
 		}
 
@@ -124,6 +118,15 @@ package actionlib.engine.core
 		public function removeSelf():void
 		{
 			parent.removeComponent(this);
+		}
+
+		private function ensureIsReady():void
+		{
+			if (!initialized)
+				throw new NotInitializedError();
+
+			if (disposed)
+				throw new AlreadyDisposedError();
 		}
 
 		public function toString():String

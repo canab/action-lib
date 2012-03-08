@@ -28,12 +28,12 @@ package actionlib.engine.components
 		
 		private function onDeactivate(e:Event):void 
 		{
-			engine.stop();
+			engine.pause();
 		}
 		
 		private function onActivate(e:Event):void 
 		{
-			engine.start();
+			engine.resume();
 		}
 		
 	}

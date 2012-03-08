@@ -1,7 +1,8 @@
 package actionlib.common.logging.adapters
 {
+	import actionlib.common.collections.ObjectMap;
 	import actionlib.common.logging.ILogAdapter;
-	import actionlib.common.logging.LogLevels;
+	import actionlib.common.logging.LogLevel;
 
 	import flash.text.TextField;
 	import flash.text.TextFormat;
@@ -9,16 +10,16 @@ package actionlib.common.logging.adapters
 	public class TextFieldLogAdapter implements ILogAdapter
 	{
 		private var _field:TextField;
-		private var _formats:Object = {};
+		private var _formats:ObjectMap = new ObjectMap(LogLevel, TextFormat);
 
 		public function TextFieldLogAdapter(field:TextField)
 		{
 			_field = field;
 
-			_formats[LogLevels.INFO] = _field.getTextFormat();
-			_formats[LogLevels.DEBUG] = _field.getTextFormat();
-			_formats[LogLevels.WARN] = _field.getTextFormat();
-			_formats[LogLevels.ERROR] = _field.getTextFormat();
+			_formats[LogLevel.INFO] = _field.getTextFormat();
+			_formats[LogLevel.DEBUG] = _field.getTextFormat();
+			_formats[LogLevel.WARN] = _field.getTextFormat();
+			_formats[LogLevel.ERROR] = _field.getTextFormat();
 
 			setColors();
 		}
@@ -29,13 +30,13 @@ package actionlib.common.logging.adapters
 				warnColor:uint = 0xD56A00,
 				errorColor:uint = 0xAA0000):void
 		{
-			TextFormat(_formats[LogLevels.DEBUG]).color = debugColor;
-			TextFormat(_formats[LogLevels.INFO]).color = infoColor;
-			TextFormat(_formats[LogLevels.WARN]).color = warnColor;
-			TextFormat(_formats[LogLevels.ERROR]).color = errorColor;
+			TextFormat(_formats[LogLevel.DEBUG]).color = debugColor;
+			TextFormat(_formats[LogLevel.INFO]).color = infoColor;
+			TextFormat(_formats[LogLevel.WARN]).color = warnColor;
+			TextFormat(_formats[LogLevel.ERROR]).color = errorColor;
 		}
 
-		public function print(sender:Object, level:int, message:String):void
+		public function print(sender:Object, level:LogLevel, message:String):void
 		{
 			if (_field.text.length > 0)
 				_field.appendText("\n");
