@@ -97,11 +97,6 @@ package actionlib.engine.core
 		//-- get/set --//
 
 
-		public function get frameRate():int
-		{
-			return StageReference.stage.frameRate;
-		}
-
 		public function get paused():Boolean { return _paused; }
 
 		public function set paused(value:Boolean):void

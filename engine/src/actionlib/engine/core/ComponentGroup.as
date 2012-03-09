@@ -81,7 +81,7 @@ package actionlib.engine.core
 		//-- selectors --//
 
 
-		public function getByName(name:String):*
+		public function getComponentByName(name:String):*
 		{
 			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
 			{
@@ -91,7 +91,7 @@ package actionlib.engine.core
 			return null;
 		}
 
-		public function getByType(type:Class):*
+		public function getComponentByType(type:Class):*
 		{
 			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
 			{
@@ -189,6 +189,7 @@ package actionlib.engine.core
 			}
 			return result;
 		}
+
 
 		//-- linked list --//
 
