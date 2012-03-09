@@ -154,28 +154,33 @@ package actionlib.engine.core
 		public function removeAllByName(name:String):int
 		{
 			var count:int = 0;
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
+			var component:ComponentBase = _head;
+			while (component != null)
 			{
-				if (comp.name == name)
+				var next:ComponentBase = component.next;
+				if (component.name == name)
 				{
-					removeComponent(comp);
+					removeComponent(component);
 					count++;
 				}
+				component = next;
 			}
-
 			return count;
 		}
 
 		public function removeAllByType(type:Class):int
 		{
 			var count:int = 0;
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
+			var component:ComponentBase = _head;
+			while (component != null)
 			{
-				if (comp is type)
+				var next:ComponentBase = component.next;
+				if (component is type)
 				{
-					removeComponent(comp);
+					removeComponent(component);
 					count++;
 				}
+				component = next;
 			}
 			return count;
 		}
