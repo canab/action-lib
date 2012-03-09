@@ -1,8 +1,6 @@
 package actionlib.engine.components
 {
-	import actionlib.engine.core.Component;
-
-	public class Size extends Component
+	public class Size
 	{
 		public var width:Number;
 		public var height:Number;
@@ -12,7 +10,11 @@ package actionlib.engine.components
 			this.width = width;
 			this.height = height;
 		}
-		
+
+		public function toString():String
+		{
+			return "Size[" + width + ", " + height + "]";
+		}
 	}
 
 }

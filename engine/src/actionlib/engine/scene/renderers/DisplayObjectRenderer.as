@@ -30,12 +30,6 @@ package actionlib.engine.scene.renderers
 			_content = content;
 		}
 
-		override protected function onInitialize():void
-		{
-			if (_renderOnFrame)
-				updateRenderOnFrameState();
-		}
-
 		override protected function onDispose():void
 		{
 			layer = null;
@@ -53,14 +47,43 @@ package actionlib.engine.scene.renderers
 				_content.rotation = _rotation.degrees;
 
 			if (_size)
-				setSize();
+				applySize();
 		}
 
-		protected function setSize():void
+		private function updateRenderOnFrameState():void
+		{
+			if (_renderOnFrame)
+			{
+				addFrameListener(render);
+				render();
+			}
+			else
+			{
+				removeProcessor(render);
+			}
+		}
+
+
+		protected function applySize():void
 		{
 			_content.width = _size.width;
 			_content.height = _size.height;
 		}
+
+		public function setScale(scale:Number):void
+		{
+			_content.scaleX = scale;
+			_content.scaleY = scale;
+		}
+
+		public function getBounds(targetContainer:Sprite = null):Rectangle
+		{
+			return content.getBounds(targetContainer || content.parent);
+		}
+
+
+		//-- get/set --//
+
 
 		public function get layer():VectorLayer { return _layer; }
 
@@ -99,12 +122,6 @@ package actionlib.engine.scene.renderers
 			render();
 		}
 
-		public function setScale(scale:Number):void
-		{
-			_content.scaleX = scale;
-			_content.scaleY = scale;
-		}
-
 		public function get visible():Boolean
 		{
 			return _content.visible;
@@ -117,11 +134,6 @@ package actionlib.engine.scene.renderers
 
 		public function get content():DisplayObject { return _content; }
 
-		public function getBounds(targetContainer:Sprite = null):Rectangle
-		{
-			return content.getBounds(targetContainer || content.parent);
-		}
-
 		public function get renderOnFrame():Boolean
 		{
 			return _renderOnFrame;
@@ -132,25 +144,9 @@ package actionlib.engine.scene.renderers
 			if (_renderOnFrame != value)
 			{
 				_renderOnFrame = value;
-
-				if (isInitialized)
-					updateRenderOnFrameState();
+				updateRenderOnFrameState();
 			}
 		}
-
-		private function updateRenderOnFrameState():void
-		{
-			if (_renderOnFrame)
-			{
-				addFrameListener(render);
-				render();
-			}
-			else
-			{
-				removeProcessor(render);
-			}
-		}
-
 	}
 
 }

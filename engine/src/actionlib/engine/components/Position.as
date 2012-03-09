@@ -1,12 +1,10 @@
 package actionlib.engine.components
 {
-	import actionlib.engine.core.Component;
-
 	import flash.display.DisplayObject;
 
 	import flash.geom.Point;
 
-	public class Position extends Component
+	public class Position
 	{
 		public static function fromDisplayObject(object:DisplayObject):Position
 		{
@@ -17,6 +15,10 @@ package actionlib.engine.components
 		{
 			return new Position(point.x, point.y);
 		}
+
+
+		//-- instance --//
+
 
 		public var x:Number;
 		public var y:Number;
@@ -32,7 +34,7 @@ package actionlib.engine.components
 			return new Point(x, y);
 		}
 		
-		override public function toString():String
+		public function toString():String
 		{
 			return "Position[" + x + ", " + y + "]";
 		}

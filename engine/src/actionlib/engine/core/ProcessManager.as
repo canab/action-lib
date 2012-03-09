@@ -11,15 +11,15 @@ package actionlib.engine.core
 
 		internal function start():void
 		{
-			_frameDispatcher.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			_frameDispatcher.addEventListener(Event.ENTER_FRAME, doStep);
 		}
 		
 		internal function stop():void 
 		{
-			_frameDispatcher.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			_frameDispatcher.removeEventListener(Event.ENTER_FRAME, doStep);
 		}
 
-		internal function onEnterFrame(e:Event):void
+		internal function doStep(e:Event = null):void
 		{
 			var processor:ProcessorBase = _head;
 
@@ -27,10 +27,10 @@ package actionlib.engine.core
 			{
 				var nextProcessor:ProcessorBase = processor.next;
 
-				if (processor.isActive)
+				if (!processor.disposed)
 					processor.process();
 
-				if (!processor.isActive)
+				if (processor.disposed)
 					removeFromList(processor);
 
 				processor = nextProcessor;
@@ -47,46 +47,37 @@ package actionlib.engine.core
 			processor.disposed = true;
 		}
 
-		internal function findProcessor(component:Component, method:Function):ProcessorBase
-		{
-			for (var processor:ProcessorBase = _head; processor != null; processor = processor.next)
-			{
-				if (processor.component == component && processor.method == method)
-					return processor;
-			}
-			
-			return null;
-		}
+		//-- linked list --//
 
-		private function addToList(processor:ProcessorBase):void
+
+		private function addToList(item:ProcessorBase):void
 		{
-			processor.next = null;
-			processor.prev = _tail;
+			item.next = null;
+			item.prev = _tail;
 
 			if (_tail)
-				_tail = _tail.next = processor;
+				_tail = _tail.next = item;
 			else
-				_tail = _head = processor;
+				_tail = _head = item;
 		}
 
-		private function removeFromList(processor:ProcessorBase):void
+		private function removeFromList(item:ProcessorBase):void
 		{
-			var prevProcessor:ProcessorBase = processor.prev;
-			var nextProcessor:ProcessorBase = processor.next;
+			var prevItem:ProcessorBase = item.prev;
+			var nextItem:ProcessorBase = item.next;
 
-			if (prevProcessor)
-				prevProcessor.next = nextProcessor;
+			if (prevItem)
+				prevItem.next = nextItem;
 
-			if (nextProcessor)
-				nextProcessor.prev = prevProcessor;
+			if (nextItem)
+				nextItem.prev = prevItem;
 
-			if (processor == _head)
-				_head = nextProcessor;
+			if (item == _head)
+				_head = nextItem;
 
-			if (processor == _tail)
-				_tail = prevProcessor;
+			if (item == _tail)
+				_tail = prevItem;
 		}
-
 	}
 
 }

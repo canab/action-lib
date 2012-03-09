@@ -2,15 +2,24 @@ package actionlib.engine.core
 {
 	internal class TimerProcessor extends ProcessorBase
 	{
-		public var frameNum:int = 0;
-		public var frameCount:int;
+		private var _frameNum:int = 0;
+		private var _frameCount:int;
+		private var _method:Function;
 
-		override internal virtual function process():void
+		function TimerProcessor(method:Function, frameCount:int)
 		{
-			if (++frameNum == frameCount)
+			_method = method;
+			_frameCount = frameCount;
+
+			super(timerFunc);
+		}
+
+		private function timerFunc():void
+		{
+			if (++_frameNum == _frameCount)
 			{
-				method.apply(null, args);
-				frameNum = 0;
+				_method();
+				_frameNum = 0;
 			}
 		}
 	}
