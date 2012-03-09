@@ -16,14 +16,15 @@ package actionlib.engine.core
 		internal var prev:ComponentBase;
 		internal var next:ComponentBase;
 
-		internal function initialize():void
+		internal function initialize(engine:Engine):void
 		{
 			if (initialized)
 				throw new AlreadyInitializedError();
-			
+
 			if (!name)
 				name = engine.nameManager.getUniqueName(ReflectUtil.getClassName(this));
 
+			this.engine = engine;
 			initialized = true;
 		}
 
@@ -34,7 +35,8 @@ package actionlib.engine.core
 			
 			if (disposed)
 				throw new AlreadyDisposedError();
-				
+
+			engine = null;
 			disposed = true;
 		}
 

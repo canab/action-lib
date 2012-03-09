@@ -83,7 +83,8 @@ package actionlib.engine.core
 
 		private function assertMethodNotUsed(method:Function):void
 		{
-			if (method in _processors)
+			var processor:ProcessorBase = _processors[method];
+			if (processor && !processor.disposed)
 				throw new Error("Function is already used in " + _processors[method]);
 		}
 	}

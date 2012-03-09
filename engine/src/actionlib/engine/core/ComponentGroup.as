@@ -11,14 +11,14 @@ package actionlib.engine.core
 		//-- initialize/dispose --//
 
 
-		override internal function initialize():void
+		override internal function initialize(engine:Engine):void
 		{
 			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
 			{
-				initializeComponent(comp);
+				comp.initialize(engine);
 			}
 
-			super.initialize();
+			super.initialize(engine);
 		}
 
 		override internal function dispose():void
@@ -27,20 +27,8 @@ package actionlib.engine.core
 
 			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
 			{
-				disposeComponent(comp);
+				comp.dispose();
 			}
-		}
-
-		private function initializeComponent(component:ComponentBase):void
-		{
-			component.engine = engine;
-			component.initialize();
-		}
-
-		private function disposeComponent(component:ComponentBase):void
-		{
-			component.dispose();
-			component.engine = null;
 		}
 
 
@@ -59,7 +47,7 @@ package actionlib.engine.core
 			component.parent = this;
 
 			if (initialized)
-				initializeComponent(component);
+				component.initialize(engine);
 		}
 
 		public function removeComponent(component:ComponentBase):void
@@ -71,7 +59,7 @@ package actionlib.engine.core
 				throw new Error("Component is not added to this group");
 
 			if (component.initialized)
-				disposeComponent(component);
+				component.dispose();
 
 			component.parent = null;
 			removeFromList(component);

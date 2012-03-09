@@ -4,9 +4,9 @@ package actionlib.engine.core
 	{
 		private var _activity:ComponentActivity;
 
-		override internal function initialize():void
+		override internal function initialize(engine:Engine):void
 		{
-			super.initialize();
+			super.initialize(engine);
 
 			if (_activity)
 				_activity.initialize(engine);
@@ -16,12 +16,12 @@ package actionlib.engine.core
 
 		override internal function dispose():void
 		{
-			super.dispose();
+			onDispose();
 
 			if (_activity)
 				_activity.dispose();
 
-			onDispose();
+			super.dispose();
 		}
 
 		protected function addFrameListener(method:Function):void

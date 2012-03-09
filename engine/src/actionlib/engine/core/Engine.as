@@ -23,14 +23,13 @@ package actionlib.engine.core
 		public function Engine(context:Object = null)
 		{
 			this.context = context;
-			this.engine = this;
 		}
 
 		//-- initialization --//
 
 		public function start():void
 		{
-			initialize();
+			initialize(this);
 			processManager.start();
 			_logger.debug("initialized");
 		}
