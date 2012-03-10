@@ -50,6 +50,14 @@ package actionlib.engine.core
 				component.initialize(engine);
 		}
 
+		public function addComponents(components:Array):void
+		{
+			for each (var component:ComponentBase in components)
+			{
+				addComponent(component);
+			}
+		}
+
 		public function removeComponent(component:ComponentBase):void
 		{
 			if (disposed)
@@ -65,8 +73,16 @@ package actionlib.engine.core
 			removeFromList(component);
 		}
 
+		public function removeComponents(components:Array):void
+		{
+			for each (var component:ComponentBase in components)
+			{
+				removeComponent(component);
+			}
+		}
 
-		//-- selectors --//
+
+		//-- helpers --//
 
 
 		public function getComponentByName(name:String):*
@@ -89,18 +105,7 @@ package actionlib.engine.core
 			return null;
 		}
 
-		public function getAllByName(name:String):Array
-		{
-			var result:Array = [];
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
-			{
-				if (comp.name == name)
-					result.push(comp);
-			}
-			return result;
-		}
-
-		public function getAllByType(type:Class):Array
+		public function getComponentsByType(type:Class):Array
 		{
 			var result:Array = [];
 			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
@@ -113,64 +118,20 @@ package actionlib.engine.core
 
 		public function removeComponentByName(name:String):Boolean
 		{
-			//noinspection LoopStatementThatDoesntLoopJS
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
-			{
-				if (comp.name == name)
-				{
-					removeComponent(comp);
-					return true;
-				}
-			}
-			return false;
+			var component:ComponentBase = getComponentByName(name);
+			if (component)
+				removeComponent(component);
+
+			return Boolean(component);
 		}
 
 		public function removeComponentByType(type:Class):Boolean
 		{
-			//noinspection LoopStatementThatDoesntLoopJS
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
-			{
-				if (comp is type)
-				{
-					removeComponent(comp);
-					return true;
-				}
-			}
-			return false;
-		}
+			var component:ComponentBase = getComponentByType(type);
+			if (component)
+				removeComponent(component);
 
-		public function removeAllByName(name:String):int
-		{
-			var count:int = 0;
-			var component:ComponentBase = _head;
-			while (component != null)
-			{
-				var next:ComponentBase = component.next;
-				if (component.name == name)
-				{
-					removeComponent(component);
-					count++;
-				}
-				component = next;
-			}
-			return count;
-		}
-
-		public function removeAllByType(type:Class):int
-		{
-			var count:int = 0;
-			var component:ComponentBase = _head;
-			while (component != null)
-			{
-				var next:ComponentBase = component.next;
-				if (component is type)
-				{
-					removeComponent(component);
-					count++;
-				}
-				component = next;
-			}
-			return count;
+			return Boolean(component);
 		}
 
 		public function getComponentList():Array
