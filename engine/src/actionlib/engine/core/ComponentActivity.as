@@ -2,6 +2,7 @@ package actionlib.engine.core
 {
 	import actionlib.common.collections.ObjectMap;
 	import actionlib.common.display.StageReference;
+	import actionlib.common.errors.ItemNotFoundError;
 
 	internal class ComponentActivity
 	{
@@ -61,11 +62,12 @@ package actionlib.engine.core
 		public function removeProcessor(method:Function):void
 		{
 			var processor:ProcessorBase = _processors[method];
-			if (processor)
-			{
-				processor.disposed = true;
-				_processors.removeKey(method);
-			}
+
+			if (!processor)
+				throw new ItemNotFoundError();
+
+			processor.disposed = true;
+			_processors.removeKey(method);
 		}
 
 		public function hasProcessor(method:Function):Boolean
