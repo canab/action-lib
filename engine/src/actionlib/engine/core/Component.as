@@ -24,6 +24,17 @@ package actionlib.engine.core
 			super.dispose();
 		}
 
+		//-- virtual --//
+
+
+		protected function onInitialize():void { }
+
+		protected function onDispose():void { }
+
+
+		//-- processors --//
+
+
 		protected function addFrameListener(method:Function):void
 		{
 			assertNotDisposed();
@@ -55,14 +66,6 @@ package actionlib.engine.core
 		{
 			return activity.hasProcessor(method);
 		}
-
-
-		//-- virtual --//
-
-
-		protected function onInitialize():void { }
-
-		protected function onDispose():void { }
 
 
 		//-- get/set --//
