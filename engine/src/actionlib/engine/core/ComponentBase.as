@@ -3,6 +3,7 @@ package actionlib.engine.core
 	import actionlib.common.errors.AlreadyDisposedError;
 	import actionlib.common.errors.AlreadyInitializedError;
 	import actionlib.common.errors.NotInitializedError;
+	import actionlib.common.events.EventSender;
 	import actionlib.common.utils.ReflectUtil;
 
 	public class ComponentBase
@@ -15,6 +16,8 @@ package actionlib.engine.core
 		internal var disposed:Boolean = false;
 		internal var prev:ComponentBase;
 		internal var next:ComponentBase;
+
+		private var _disposeEvent:EventSender;
 
 		internal function initialize(engine:Engine):void
 		{
@@ -38,6 +41,9 @@ package actionlib.engine.core
 
 			engine = null;
 			disposed = true;
+
+			if (_disposeEvent)
+				_disposeEvent.dispatch();
 		}
 
 		public function removeSelf():void
@@ -87,6 +93,14 @@ package actionlib.engine.core
 		public function get isDisposed():Boolean
 		{
 			return disposed;
+		}
+
+		public function get disposeEvent():EventSender
+		{
+			if (!_disposeEvent)
+				_disposeEvent = new EventSender(this);
+
+			return _disposeEvent;
 		}
 
 	}
