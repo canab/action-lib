@@ -1,6 +1,5 @@
 package actionlib.engine.core
 {
-	import actionlib.common.display.StageReference;
 	import actionlib.common.events.EventSender;
 	import actionlib.common.logging.Logger;
 	import actionlib.motion.TweenManager;
