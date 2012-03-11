@@ -57,12 +57,10 @@ package actionlib.engine.core
 		{
 			assertInitialized();
 			var path:String = name;
-
 			for (var comp:ComponentBase = parent; comp != engine; comp = comp.parent)
 			{
 				path = comp.name + PATH_SEPARATOR + path;
 			}
-
 			return path;
 		}
 
