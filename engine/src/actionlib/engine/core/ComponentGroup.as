@@ -144,6 +144,36 @@ package actionlib.engine.core
 			return result;
 		}
 
+		public function queryComponent(condition:Function):*
+		{
+			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
+			{
+				if (condition(comp))
+					return comp;
+
+				if (comp is ComponentGroup)
+				{
+					var result:* = ComponentGroup(comp).queryComponent(condition);
+					if (result)
+						return result;
+				}
+			}
+			return null;
+		}
+
+		public function getComponentByPath(path:String):*
+		{
+			var parts:Array = path.split(ComponentBase.PATH_SEPARATOR);
+			var comp:ComponentGroup = this;
+			for each (var part:String in parts)
+			{
+				comp = comp.getComponentByName(part);
+				if (!comp)
+					return null;
+			}
+			return comp;
+		}
+
 
 		//-- linked list --//
 

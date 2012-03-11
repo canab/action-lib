@@ -8,6 +8,8 @@ package actionlib.engine.core
 
 	public class ComponentBase
 	{
+		public static const PATH_SEPARATOR:String = "/";
+
 		public var name:String;
 		public var engine:Engine;
 		public var parent:ComponentGroup;
@@ -49,6 +51,19 @@ package actionlib.engine.core
 		public function removeSelf():void
 		{
 			parent.removeComponent(this);
+		}
+
+		public function getPath():String
+		{
+			assertInitialized();
+			var path:String = name;
+
+			for (var comp:ComponentBase = parent; comp != engine; comp = comp.parent)
+			{
+				path = comp.name + PATH_SEPARATOR + path;
+			}
+
+			return path;
 		}
 
 
