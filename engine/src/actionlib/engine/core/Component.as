@@ -1,6 +1,6 @@
 package actionlib.engine.core
 {
-	public class Component extends ComponentGroup
+	public class Component extends GroupBase
 	{
 		private var _activity:ComponentActivity;
 

@@ -5,7 +5,7 @@ package actionlib.engine.core
 	import actionlib.motion.TweenManager;
 	import actionlib.motion.Tweener;
 
-	public class Engine extends ComponentGroup
+	public class Engine extends GroupBase
 	{
 		public var context:Object;
 

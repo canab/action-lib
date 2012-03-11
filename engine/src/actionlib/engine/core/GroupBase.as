@@ -2,10 +2,10 @@ package actionlib.engine.core
 {
 	import actionlib.common.errors.AlreadyDisposedError;
 
-	internal class ComponentGroup extends ComponentBase
+	internal class GroupBase extends ElementBase
 	{
-		private var _head:ComponentBase;
-		private var _tail:ComponentBase;
+		private var _head:ElementBase;
+		private var _tail:ElementBase;
 
 
 		//-- initialize/dispose --//
@@ -13,7 +13,7 @@ package actionlib.engine.core
 
 		override internal function initialize(engine:Engine):void
 		{
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
+			for (var comp:ElementBase = _head; comp != null; comp = comp.next)
 			{
 				comp.initialize(engine);
 			}
@@ -25,7 +25,7 @@ package actionlib.engine.core
 		{
 			super.dispose();
 
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
+			for (var comp:ElementBase = _head; comp != null; comp = comp.next)
 			{
 				comp.dispose();
 			}
@@ -35,7 +35,7 @@ package actionlib.engine.core
 		//-- child components --//
 
 
-		public function addComponent(component:ComponentBase):void
+		public function addComponent(component:ElementBase):void
 		{
 			if (disposed)
 				throw new AlreadyDisposedError();
@@ -52,13 +52,13 @@ package actionlib.engine.core
 
 		public function addComponents(components:Array):void
 		{
-			for each (var component:ComponentBase in components)
+			for each (var component:ElementBase in components)
 			{
 				addComponent(component);
 			}
 		}
 
-		public function removeComponent(component:ComponentBase):void
+		public function removeComponent(component:ElementBase):void
 		{
 			if (disposed)
 				throw new AlreadyDisposedError();
@@ -75,7 +75,7 @@ package actionlib.engine.core
 
 		public function removeComponents(components:Array):void
 		{
-			for each (var component:ComponentBase in components)
+			for each (var component:ElementBase in components)
 			{
 				removeComponent(component);
 			}
@@ -87,7 +87,7 @@ package actionlib.engine.core
 
 		public function getComponentByName(name:String):*
 		{
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
+			for (var comp:ElementBase = _head; comp != null; comp = comp.next)
 			{
 				if (comp.name == name)
 					return comp;
@@ -97,7 +97,7 @@ package actionlib.engine.core
 
 		public function getComponentByType(type:Class):*
 		{
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
+			for (var comp:ElementBase = _head; comp != null; comp = comp.next)
 			{
 				if (comp is type)
 					return comp;
@@ -108,7 +108,7 @@ package actionlib.engine.core
 		public function getComponentsByType(type:Class):Array
 		{
 			var result:Array = [];
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
+			for (var comp:ElementBase = _head; comp != null; comp = comp.next)
 			{
 				if (comp is type)
 					result.push(comp);
@@ -118,7 +118,7 @@ package actionlib.engine.core
 
 		public function removeComponentByName(name:String):Boolean
 		{
-			var component:ComponentBase = getComponentByName(name);
+			var component:ElementBase = getComponentByName(name);
 			if (component)
 				removeComponent(component);
 
@@ -127,7 +127,7 @@ package actionlib.engine.core
 
 		public function removeComponentByType(type:Class):Boolean
 		{
-			var component:ComponentBase = getComponentByType(type);
+			var component:ElementBase = getComponentByType(type);
 			if (component)
 				removeComponent(component);
 
@@ -137,34 +137,17 @@ package actionlib.engine.core
 		public function getComponentList():Array
 		{
 			var result:Array = [];
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
+			for (var comp:ElementBase = _head; comp != null; comp = comp.next)
 			{
 				result.push(comp);
 			}
 			return result;
 		}
 
-		public function queryComponent(condition:Function):*
-		{
-			for (var comp:ComponentBase = _head; comp != null; comp = comp.next)
-			{
-				if (condition(comp))
-					return comp;
-
-				if (comp is ComponentGroup)
-				{
-					var result:* = ComponentGroup(comp).queryComponent(condition);
-					if (result)
-						return result;
-				}
-			}
-			return null;
-		}
-
 		public function getComponentByPath(path:String):*
 		{
-			var parts:Array = path.split(ComponentBase.PATH_SEPARATOR);
-			var comp:ComponentGroup = this;
+			var parts:Array = path.split(ElementBase.PATH_SEPARATOR);
+			var comp:GroupBase = this;
 			for each (var part:String in parts)
 			{
 				comp = comp.getComponentByName(part);
@@ -178,7 +161,7 @@ package actionlib.engine.core
 		//-- linked list --//
 
 
-		private function addToList(item:ComponentBase):void
+		private function addToList(item:ElementBase):void
 		{
 			item.next = null;
 			item.prev = _tail;
@@ -189,10 +172,10 @@ package actionlib.engine.core
 				_tail = _head = item;
 		}
 
-		private function removeFromList(item:ComponentBase):void
+		private function removeFromList(item:ElementBase):void
 		{
-			var prevItem:ComponentBase = item.prev;
-			var nextItem:ComponentBase = item.next;
+			var prevItem:ElementBase = item.prev;
+			var nextItem:ElementBase = item.next;
 
 			if (prevItem)
 				prevItem.next = nextItem;

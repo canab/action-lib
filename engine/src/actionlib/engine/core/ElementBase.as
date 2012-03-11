@@ -6,18 +6,18 @@ package actionlib.engine.core
 	import actionlib.common.events.EventSender;
 	import actionlib.common.utils.ReflectUtil;
 
-	public class ComponentBase
+	public class ElementBase
 	{
 		public static const PATH_SEPARATOR:String = "/";
 
 		public var name:String;
 		public var engine:Engine;
-		public var parent:ComponentGroup;
+		public var parent:GroupBase;
 
 		internal var initialized:Boolean = false;
 		internal var disposed:Boolean = false;
-		internal var prev:ComponentBase;
-		internal var next:ComponentBase;
+		internal var prev:ElementBase;
+		internal var next:ElementBase;
 
 		private var _disposeEvent:EventSender;
 
@@ -57,7 +57,7 @@ package actionlib.engine.core
 		{
 			assertInitialized();
 			var path:String = name;
-			for (var comp:ComponentBase = parent; comp != engine; comp = comp.parent)
+			for (var comp:ElementBase = parent; comp != engine; comp = comp.parent)
 			{
 				path = comp.name + PATH_SEPARATOR + path;
 			}
