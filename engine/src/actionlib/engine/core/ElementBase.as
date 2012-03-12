@@ -64,7 +64,7 @@ package actionlib.engine.core
 			return path;
 		}
 
-		public function reset():void
+		public function resetComponentState():void
 		{
 			initialized = false;
 			disposed = false;
