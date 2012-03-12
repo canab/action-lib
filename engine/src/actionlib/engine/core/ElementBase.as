@@ -64,6 +64,12 @@ package actionlib.engine.core
 			return path;
 		}
 
+		public function reset():void
+		{
+			initialized = false;
+			disposed = false;
+		}
+
 
 		//-- asserts --//
 
