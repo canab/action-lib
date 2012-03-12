@@ -1,8 +1,7 @@
 package actionlib.engine.components
 {
-	import actionlib.engine.core.Component;
 
-	public class Direction8 extends Component
+	public class Direction8
 	{
 		public static const UP:int         = 0;
 		public static const RIGHT_UP:int   = 1;
@@ -40,17 +39,20 @@ package actionlib.engine.components
 			return Math.round(angle / 45.0) % 8;
 		}
 
-		/*///////////////////////////////////////////////////////////////////////////////////
-		//
-		// instance
-		//
-		///////////////////////////////////////////////////////////////////////////////////*/
+
+		//-- instance --//
+
 
 		public var value:int = DOWN;
 
 		public function Direction8(newValue:int = DOWN)
 		{
 			this.value = newValue;
+		}
+
+		public function toString():String
+		{
+			return "Direction8[" + value + "]";
 		}
 	}
 

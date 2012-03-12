@@ -1,6 +1,6 @@
 package actionlib.engine.scene
 {
-	import actionlib.engine.core.Component;
+	import actionlib.engine.core.ElementBase;
 	import actionlib.engine.core.Entity;
 
 	import flash.display.Sprite;
@@ -15,7 +15,7 @@ package actionlib.engine.scene
 			_root.mouseEnabled = false;
 		}
 
-		override public function addComponent(component:Component):void
+		override public function addComponent(component:ElementBase):void
 		{
 			if (component is VectorLayer)
 				_root.addChild(VectorLayer(component).content);
@@ -23,7 +23,7 @@ package actionlib.engine.scene
 			super.addComponent(component);
 		}
 
-		override public function removeComponent(component:Component):void
+		override public function removeComponent(component:ElementBase):void
 		{
 			if (component is VectorLayer)
 				_root.removeChild(VectorLayer(component).content);

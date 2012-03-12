@@ -1,29 +1,17 @@
 package actionlib.engine.core
 {
+
 	internal class ProcessorBase
 	{
 		internal var next:ProcessorBase;
 		internal var prev:ProcessorBase;
 
-		internal var component:Component;
-		internal var method:Function;
-		internal var args:Array;
-		
+		internal var process:Function;
 		internal var disposed:Boolean = false;
 
-		internal virtual function process():void
+		public function ProcessorBase(processFunc:Function)
 		{
-		}
-
-		internal function get isActive():Boolean
-		{
-			if (disposed)
-				return false;
-
-			if (!component)
-				return true;
-
-			return !component.disposed;
+			process = processFunc;
 		}
 	}
 }

@@ -2,9 +2,9 @@ package actionlib.engine.core
 {
 	internal class FrameProcessor extends ProcessorBase
 	{
-		override internal virtual function process():void
+		function FrameProcessor(processFunc:Function)
 		{
-			method.apply(null, args);
+			super(processFunc);
 		}
 	}
 }

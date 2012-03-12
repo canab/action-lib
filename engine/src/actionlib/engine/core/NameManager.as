@@ -2,14 +2,15 @@ package actionlib.engine.core
 {
 	internal class NameManager
 	{
-		public static const SEPARATOR:String = "@";
-		public static const PREFIX:String = "_";
+		private var _prefixes:Object = {};
 
-		private var _currentNum:uint = 0;
-
-		public function getUniqueName():String
+		public function getUniqueName(prefix:String = "#"):String
 		{
-			return PREFIX + String(_currentNum++);
+			var num:int = _prefixes[prefix];
+			num++;
+			_prefixes[prefix] = num;
+
+			return prefix + num;
 		}
 	}
 }

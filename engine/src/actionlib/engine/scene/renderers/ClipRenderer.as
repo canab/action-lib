@@ -21,14 +21,6 @@ package actionlib.engine.scene.renderers
 			super(content);
 		}
 
-		override protected function onInitialize():void
-		{
-			super.onInitialize();
-
-			if (_isPlaying)
-				addFrameListener(handlePlaying);
-		}
-
 		public function onPlayComplete(listener:Function):ClipRenderer
 		{
 			_playCompleteEvent.addListener(listener);
@@ -90,9 +82,7 @@ package actionlib.engine.scene.renderers
 			if (!_isPlaying)
 			{
 				_isPlaying = true;
-
-				if (isInitialized)
-					addFrameListener(handlePlaying);
+				addFrameListener(handlePlaying);
 			}
 		}
 
@@ -101,9 +91,7 @@ package actionlib.engine.scene.renderers
 			if (_isPlaying)
 			{
 				_isPlaying = false;
-
-				if (isInitialized)
-					removeProcessor(handlePlaying);
+				removeProcessor(handlePlaying);
 			}
 		}
 
