@@ -24,38 +24,34 @@ package actionlib.engine.components
 			this.y = y;
 		}
 
-		public function mult(value:Number):Vector2
+		public function addVector(value:Point):Vector2
+		{
+			return new Vector2(x + value.x, y + value.y);
+		}
+
+		public function subtractVector(value:Point):Vector2
+		{
+			return new Vector2(x - value.x, y - value.y);
+		}
+
+		public function scale(value:Number):Vector2
 		{
 			return new Vector2(x * value, y * value);
 		}
 
-		public function multScalar(a:Point, b:Point):Number
+		public function getNormalized():Vector2
 		{
-			return a.x* b.x + a.y * b.y;
+			return copy().normalizeSelf();
 		}
 
-		public function unitVector():Vector2
-		{
-			var length:Number = this.length;
-			var result:Vector2 = new Vector2(x, y);
-
-			if (length)
-			{
-				result.x /= length;
-				result.y /= length;
-			}
-
-			return result;
-		}
-
-		public function vectorProjectionOnto(value:Vector2):Vector2
+		public function vectorProjectionTo(value:Vector2):Vector2
 		{
 			return value
-					.unitVector()
-					.multSelf(scalarProjectionOnto(value));
+					.getNormalized()
+					.scaleSelf(scalarProjectionTo(value));
 		}
 
-		public function scalarProjectionOnto(v:Vector2):Number
+		public function scalarProjectionTo(v:Vector2):Number
 		{
 			return (x * v.x + y * v.y) / v.length;
 		}
@@ -76,15 +72,29 @@ package actionlib.engine.components
 			return this;
 		}
 
-		public function multSelf(value:Number):Vector2
+		public function scaleSelf(value:Number):Vector2
 		{
 			x *= value;
 			y *= value;
 			return this;
 		}
 
+		public function normalizeSelf():Vector2
+		{
+			var length:Number = this.length;
+
+			if (length)
+			{
+				x /= length;
+				y /= length;
+			}
+
+			return this;
+		}
+
 
 		//-- get/set --//
+
 
 		public function get lengthSquared():Number
 		{
