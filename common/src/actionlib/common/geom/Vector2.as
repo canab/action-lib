@@ -1,4 +1,4 @@
-package actionlib.engine.components
+package actionlib.common.geom
 {
 	import flash.geom.Point;
 
@@ -39,7 +39,7 @@ package actionlib.engine.components
 			return new Vector2(x * value, y * value);
 		}
 
-		public function getNormalized():Vector2
+		public function normalized():Vector2
 		{
 			return copy().normalizeSelf();
 		}
@@ -47,13 +47,18 @@ package actionlib.engine.components
 		public function vectorProjectionTo(value:Vector2):Vector2
 		{
 			return value
-					.getNormalized()
+					.normalized()
 					.scaleSelf(scalarProjectionTo(value));
 		}
 
-		public function scalarProjectionTo(v:Vector2):Number
+		public function scalarProjectionTo(value:Vector2):Number
 		{
-			return (x * v.x + y * v.y) / v.length;
+			return (x * value.x + y * value.y) / value.length;
+		}
+
+		public function dotProduct(value:Vector2):Number
+		{
+			return x * value.x + y * value.y;
 		}
 
 		//-- self modification --//
@@ -93,14 +98,6 @@ package actionlib.engine.components
 		}
 
 
-		//-- get/set --//
-
-
-		public function get lengthSquared():Number
-		{
-			return x * x + y * y;
-		}
-
 		public function copy():Vector2
 		{
 			return new Vector2(x, y);
@@ -110,6 +107,15 @@ package actionlib.engine.components
 		{
 			return 'Vector2(' + x + ', ' + y + ')';
 		}
+
+		//-- get/set --//
+
+
+		public function get lengthSquared():Number
+		{
+			return x * x + y * y;
+		}
+
 	}
 
 }
