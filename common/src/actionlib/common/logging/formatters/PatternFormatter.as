@@ -16,7 +16,7 @@ package actionlib.common.logging.formatters
 
 		public function format(sender:Object, level:LogLevel, message:String):String
 		{
-			var levelText:String = (level.name.length == 4 ? " " : "") + level;
+			var levelText:String = (level.name.length == 4 ? " " : "") + level.name;
 
 			var senderName:String = String(sender)
 					.replace(/\[object (.+)]$/, "$1")
