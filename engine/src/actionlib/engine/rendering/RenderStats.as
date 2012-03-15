@@ -21,6 +21,7 @@ package actionlib.engine.rendering
 		{
 			var stats:Array = _records.getValues();
 			stats.sortOn("totalBytes", Array.NUMERIC | Array.DESCENDING);
+			stats.push(getTotalStats());
 			var result:String = stats.join("\n");
 			return result;
 		}
