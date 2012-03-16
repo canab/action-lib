@@ -28,15 +28,10 @@
 	</target>
 
 	<target name="buildNumber">
-		<exec executable="svn" failonerror="true" output="${include.file}">
-			<arg line="info"/>
-		</exec>
-
 		<property name="common.output.file" value="${output.dir}/action-common-${version}.swc"/>
 		<property name="motion.output.file" value="${output.dir}/action-motion-${version}.swc"/>
 		<property name="engine.output.file" value="${output.dir}/action-engine-${version}.swc"/>
 		<property name="controls.output.file" value="${output.dir}/action-controls-${version}.swc"/>
-
 		<echo message="version: ${version}"/>
 	</target>
 
@@ -97,10 +92,6 @@
 				<arg line="-output=@{swcFile}"/>
 				<arg line="-benchmark=true"/>
 			</exec>
-
-			<zip basedir="." includes="${include.file}" destfile="@{swcFile}" update="true"/>
-
-			<delete file="${include.file}"/>
 
 		</sequential>
 	</macrodef>
