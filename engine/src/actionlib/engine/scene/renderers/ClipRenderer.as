@@ -33,6 +33,12 @@ package actionlib.engine.scene.renderers
 			return this;
 		}
 
+		public function gotoRandomFrame():ClipRenderer
+		{
+			currentFrame = MathUtil.randomInt(1, totalFrames);
+			return this;
+		}
+
 		public function play():void
 		{
 			beginPlay(loopHandler);
