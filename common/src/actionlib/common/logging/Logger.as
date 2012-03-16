@@ -128,25 +128,25 @@ package actionlib.common.logging
 
 		public function debug(...args):void
 		{
-			if (_level <= LogLevel.DEBUG)
+			if (_level.order <= LogLevel.DEBUG.order)
 				print(LogLevel.DEBUG, joinArgs(args));
 		}
 
 		public function info(...args):void
 		{
-			if (_level <= LogLevel.INFO)
+			if (_level.order <= LogLevel.INFO.order)
 				print(LogLevel.INFO, joinArgs(args));
 		}
 
 		public function warn(...args):void
 		{
-			if (_level <= LogLevel.WARN)
+			if (_level.order <= LogLevel.WARN.order)
 				print(LogLevel.WARN, joinArgs(args));
 		}
 
 		public function error(...args):void
 		{
-			if (_level <= LogLevel.ERROR)
+			if (_level.order <= LogLevel.ERROR.order)
 				print(LogLevel.ERROR, joinArgs(args));
 		}
 

@@ -39,6 +39,12 @@ package actionlib.engine.scene.renderers
 			return this;
 		}
 
+		public function autoPlay():ClipRenderer
+		{
+			beginPlay(loopHandler);
+			return this;
+		}
+
 		public function play():void
 		{
 			beginPlay(loopHandler);

@@ -85,6 +85,12 @@ package actionlib.engine.scene.renderers
 		//-- get/set --//
 
 
+		public function setLayer(value:VectorLayer):DisplayObjectRenderer
+		{
+			this.layer = value;
+			return this;
+		}
+
 		public function get layer():VectorLayer { return _layer; }
 
 		public function set layer(value:VectorLayer):void
