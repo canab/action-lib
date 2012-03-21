@@ -44,7 +44,9 @@ package actionlib.engine.scene.renderers
 
 		override protected function updateFrame():void
 		{
-			var frame:BitmapFrame = _frames[currentFrame - 1];
+			var frame:BitmapFrame = _frames.length > 0
+					? _frames[currentFrame - 1]
+					: null;
 			
 			if (frame)
 			{

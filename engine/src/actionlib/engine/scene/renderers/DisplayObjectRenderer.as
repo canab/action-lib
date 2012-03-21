@@ -63,7 +63,6 @@ package actionlib.engine.scene.renderers
 			}
 		}
 
-
 		protected function applySize():void
 		{
 			_content.width = _size.width;
