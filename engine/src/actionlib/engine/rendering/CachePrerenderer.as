@@ -11,6 +11,7 @@ package actionlib.engine.rendering
 		private var _processor:EnterFrameProcessor = new EnterFrameProcessor();
 		private var _cache:BitmapCache;
 		private var _executed:Boolean;
+		private var _addedKeys:Object = {};
 
 		public function CachePrerenderer(cache:BitmapCache)
 		{
@@ -34,6 +35,11 @@ package actionlib.engine.rendering
 
 		public function addClip(key:Object, clip:MovieClip):CachePrerenderer
 		{
+			if (key in _addedKeys)
+				throw new Error("Object with key='" + key + "' is already added");
+			else
+				_addedKeys[key] = key;
+
 			var frames:Vector.<BitmapFrame> = _cache.getFrames(key);
 			var renderer:ClipPrerenderer = new ClipPrerenderer(clip, frames);
 			_processor.addTarget(renderer);

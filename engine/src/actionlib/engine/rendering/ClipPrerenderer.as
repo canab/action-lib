@@ -100,7 +100,8 @@ package actionlib.engine.rendering
 
 		public function process():void
 		{
-			_frames.push(renderFrame());
+			if (!completed)
+				_frames.push(renderFrame());
 
 			if (completed)
 				_content.removeEventListener(Event.ADDED, onAdded);
@@ -186,7 +187,7 @@ package actionlib.engine.rendering
 
 		public function get completed():Boolean
 		{
-			return _frames.length == _totalFrames;
+			return _frames.length >= _totalFrames;
 		}
 
 		public function get frames():Vector.<BitmapFrame>
