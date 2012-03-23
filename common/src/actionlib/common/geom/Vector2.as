@@ -51,26 +51,26 @@ package actionlib.common.geom
 					.scaleSelf(scalarProjectionTo(value));
 		}
 
-		public function scalarProjectionTo(value:Vector2):Number
+		public function scalarProjectionTo(value:Point):Number
 		{
 			return (x * value.x + y * value.y) / value.length;
 		}
 
-		public function dotProduct(value:Vector2):Number
+		public function dotProduct(value:Point):Number
 		{
 			return x * value.x + y * value.y;
 		}
 
 		//-- self modification --//
 
-		public function addSelf(value:Vector2):Vector2
+		public function addSelf(value:Point):Vector2
 		{
 			x += value.x;
 			y += value.y;
 			return this;
 		}
 
-		public function subtractSelf(value:Vector2):Vector2
+		public function subtractSelf(value:Point):Vector2
 		{
 			x -= value.x;
 			y -= value.y;
