@@ -97,6 +97,12 @@ package actionlib.common.geom
 			return this;
 		}
 
+		public function setSelfFrom(value:Point):Vector2
+		{
+			x = value.x;
+			y = value.y;
+			return this;
+		}
 
 		public function copy():Vector2
 		{
@@ -115,7 +121,6 @@ package actionlib.common.geom
 		{
 			return x * x + y * y;
 		}
-
 	}
 
 }
