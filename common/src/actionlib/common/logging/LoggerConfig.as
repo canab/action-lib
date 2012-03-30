@@ -38,8 +38,9 @@ package actionlib.common.logging
 
 		private function applyLevel(loggerName:String, level:LogLevel):void
 		{
-			for each (var logger:Logger in Logger.loggers)
+			for (var key:Object in Logger.loggers)
 			{
+				var logger:Logger = Logger(key);
 				if (StringUtil.startsWith(logger.name, loggerName))
 					logger.level = level;
 			}

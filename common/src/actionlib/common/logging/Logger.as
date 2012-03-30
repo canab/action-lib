@@ -123,7 +123,7 @@ package actionlib.common.logging
 
 			_level = _config.getLevel(_name);
 
-			loggers[this] = this;
+			loggers[this] = true;
 		}
 
 		public function debug(...args):void
