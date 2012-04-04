@@ -5,6 +5,7 @@ package actionlib.engine.scene
 	public interface IVectorRenderer
 	{
 		function get content():DisplayObject;
+		function get childIndex():int;
 		function setScale(value:Number):void;
 	}
 	

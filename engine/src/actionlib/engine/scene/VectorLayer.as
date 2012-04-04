@@ -29,7 +29,13 @@ package actionlib.engine.scene
 		public function addItem(item:IVectorRenderer):void
 		{
 			_items.push(item);
-			_content.addChild(item.content);
+
+			var childIndex:int = item.childIndex;
+
+			if (childIndex >= 0)
+				_content.addChildAt(item.content, childIndex);
+			else
+				_content.addChild(item.content);
 		}
 
 		public function removeItem(item:IVectorRenderer):void
@@ -112,7 +118,6 @@ package actionlib.engine.scene
 				}
 			}
 		}
-
 	}
 
 }

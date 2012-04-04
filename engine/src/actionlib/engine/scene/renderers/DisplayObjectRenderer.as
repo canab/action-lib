@@ -21,6 +21,7 @@ package actionlib.engine.scene.renderers
 		private var _size:Size;
 		private var _rotation:Rotation;
 		private var _renderOnFrame:Boolean = false;
+		private var _childIndex:int = -1;
 
 		public function DisplayObjectRenderer(content:DisplayObject)
 		{
@@ -151,6 +152,21 @@ package actionlib.engine.scene.renderers
 				_renderOnFrame = value;
 				updateRenderOnFrameState();
 			}
+		}
+
+		public function get childIndex():int
+		{
+			if (_content.parent)
+				return _content.parent.getChildIndex(_content);
+			else
+				return _childIndex;
+		}
+
+		public function set childIndex(value:int):void
+		{
+			_childIndex = value;
+			if (_content.parent)
+				_content.parent.setChildIndex(_content, _childIndex);
 		}
 	}
 
