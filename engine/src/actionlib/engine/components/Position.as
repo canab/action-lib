@@ -1,7 +1,6 @@
 package actionlib.engine.components
 {
 	import flash.display.DisplayObject;
-
 	import flash.geom.Point;
 
 	public class Position
@@ -27,6 +26,12 @@ package actionlib.engine.components
 		{
 			this.x = x;
 			this.y = y;
+		}
+
+		public function applyPoint(point:Point):void
+		{
+			x = point.x;
+			y = point.y;
 		}
 		
 		public function toPoint():Point
