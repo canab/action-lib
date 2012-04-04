@@ -42,10 +42,6 @@ package actionlib.engine.core
 			addToList(processor);
 		}
 
-		internal function removeProcessor(processor:ProcessorBase):void
-		{
-			processor.disposed = true;
-		}
 
 		//-- linked list --//
 
