@@ -1,11 +1,11 @@
 package actionlib.engine.scene
 {
 	import actionlib.common.errors.ItemNotFoundError;
+	import actionlib.common.geom.Vector2;
 	import actionlib.engine.core.Component;
 
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
-	import flash.geom.Point;
 
 	public class VectorLayer extends Component
 	{
@@ -82,6 +82,16 @@ package actionlib.engine.scene
 			}
 		}
 
+		public function getMousePosition(output:Vector2 = null):Vector2
+		{
+			if (!output)
+				output = new Vector2();
+
+			output.x = _content.mouseX;
+			output.y = _content.mouseY;
+			return output;
+		}
+
 		/*///////////////////////////////////////////////////////////////////////////////////
 		//
 		// get/set
@@ -96,11 +106,6 @@ package actionlib.engine.scene
 		public function get enableOrdering():Boolean
 		{
 			return _enableOrdering;
-		}
-
-		public function get mousePosition():Point
-		{
-			return new Point(_content.mouseX, _content.mouseY);
 		}
 
 		public function set enableOrdering(value:Boolean):void
