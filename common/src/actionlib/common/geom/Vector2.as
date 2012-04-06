@@ -4,6 +4,8 @@ package actionlib.common.geom
 
 	public class Vector2 extends Point
 	{
+		public static const NULL:Vector2 = new Vector2();
+
 		public static function fromPoint(point:Point):Vector2
 		{
 			return new Vector2(point.x, point.y);
@@ -13,7 +15,6 @@ package actionlib.common.geom
 		{
 			return fromPoint(Point.polar(length, angle));
 		}
-
 
 		//-- instance --//
 
@@ -42,6 +43,11 @@ package actionlib.common.geom
 		public function normalized():Vector2
 		{
 			return copy().normalizeSelf();
+		}
+
+		public function getAngle(v:Point):Number
+		{
+			return Math.acos((x * v.x + y * v.y) / Math.sqrt ((x*x + y*y) * (v.x * v.x + v.y * v.y)))
 		}
 
 		public function vectorProjectionTo(value:Vector2):Vector2
