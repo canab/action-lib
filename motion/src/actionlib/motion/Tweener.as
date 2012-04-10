@@ -31,6 +31,9 @@ package actionlib.motion
 
 		public function Tweener(manager:TweenManager, target:Object, duration:int)
 		{
+			if (!target)
+				throw new Error("Target cannot be null");
+
 			this.target = target;
 
 			_manager = manager;
