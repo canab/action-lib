@@ -12,7 +12,7 @@ package actionlib.common.utils
 
 		public static function getServerName(url:String):String
 		{
-			if (StringUtil.startsWith(url, "file:///"))
+			if (StringUtil.startsWith(url, "file:") || StringUtil.startsWith(url, "app:"))
 				return "localhost";
 
 			var sp:String = getServerNameWithPort(url);
