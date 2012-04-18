@@ -87,7 +87,13 @@ package actionlib.engine.scene.renderers
 
 		public function setLayer(value:VectorLayer):DisplayObjectRenderer
 		{
-			this.layer = value;
+			layer = value;
+			return this;
+		}
+
+		public function setPosition(value:Position):DisplayObjectRenderer
+		{
+			position = value;
 			return this;
 		}
 
