@@ -136,9 +136,9 @@ package actionlib.gui
 
 		private function getDialogPosition(window:WindowBase):Point
 		{
-			return new Point(
-					0.5 * (ui.bounds.width - window.width),
-					0.5 * (ui.bounds.height - window.height));
+			var x:Number = 0.5 * (ui.bounds.width - window.width);
+			var y:Number = 0.5 * (ui.bounds.height - window.height);
+			return new Point(Math.max(x, 0), Math.max(y, 0));
 		}
 
 		/*///////////////////////////////////////////////////////////////////////////////////
