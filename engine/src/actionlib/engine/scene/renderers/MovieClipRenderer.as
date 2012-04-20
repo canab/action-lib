@@ -37,17 +37,24 @@ package actionlib.engine.scene.renderers
 
 		override protected function updateFrame():void
 		{
+			var frameNum:int = currentFrame;
+			var framesCount:int = totalFrames;
+
 			for each (var clip:MovieClip in _subClips)
 			{
-				clip.gotoAndStop(currentFrame % totalFrames);
+				var frame:int = (frameNum <= framesCount)
+						? frameNum
+						: frameNum % framesCount;
+
+				clip.gotoAndStop(frame);
 			}
 		}
 
 		/*///////////////////////////////////////////////////////////////////////////////////
-		//
-		// get/set
-		//
-		///////////////////////////////////////////////////////////////////////////////////*/
+		 //
+		 // get/set
+		 //
+		 ///////////////////////////////////////////////////////////////////////////////////*/
 
 		override public function get totalFrames():int
 		{
