@@ -57,9 +57,9 @@ package actionlib.common.ui
 		public function acceptsEvent(e:KeyboardEvent):Boolean
 		{
 			return key.code == e.keyCode
-					&& isAlt == e.altKey
 					&& isControl == e.ctrlKey
-					&& isAlt == e.altKey;
+					&& isAlt == e.altKey
+					&& isShift == e.shiftKey;
 		}
 
 		public function getText():String
