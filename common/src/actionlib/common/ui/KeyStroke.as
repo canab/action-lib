@@ -10,6 +10,8 @@ package actionlib.common.ui
 		 *
 		 * @param text
 		 * example: "Ctrl+Alt+A", "Shift+B"
+		 * User question mark to ignore modifiers
+		 * example: "Ctrl?+A" - ignore control key
 		 * @see actionlib.common.ui.Key
 		 */
 		public static function parse(text:String):KeyStroke
@@ -33,21 +35,43 @@ package actionlib.common.ui
 			for each (var part:String in parts)
 			{
 				var firstChar:String = StringUtil.trim(part).charAt(0).toUpperCase();
+				var containsQuestion:Boolean = part.indexOf("?") >= 0;
+
 				if (firstChar == "C")
-					keyStroke.isControl = true;
+				{
+					if (containsQuestion)
+						keyStroke.ignoreControl = true;
+					else
+						keyStroke.isControl = true;
+				}
 				else if (firstChar == "A")
-					keyStroke.isAlt = true;
+				{
+					if (containsQuestion)
+						keyStroke.ignoreAlt = true;
+					else
+						keyStroke.isAlt = true;
+				}
 				else if (firstChar == "S")
-					keyStroke.isShift = true;
+				{
+					if (containsQuestion)
+						keyStroke.ignoreShift = true;
+					else
+						keyStroke.isShift = true;
+				}
 			}
 
 			return keyStroke;
 		}
 
 		public var key:Key;
-		public var isControl:Boolean;
-		public var isShift:Boolean;
-		public var isAlt:Boolean;
+
+		public var isControl:Boolean = false;
+		public var isShift:Boolean = false;
+		public var isAlt:Boolean = false;
+
+		public var ignoreControl:Boolean = false;
+		public var ignoreShift:Boolean = false;
+		public var ignoreAlt:Boolean = false;
 
 		public function KeyStroke(key:Key)
 		{
@@ -57,9 +81,9 @@ package actionlib.common.ui
 		public function acceptsEvent(e:KeyboardEvent):Boolean
 		{
 			return key.code == e.keyCode
-					&& isControl == e.ctrlKey
-					&& isAlt == e.altKey
-					&& isShift == e.shiftKey;
+					&& (ignoreControl || isControl == e.ctrlKey)
+					&& (ignoreAlt || isAlt == e.altKey)
+					&& (ignoreShift || isShift == e.shiftKey);
 		}
 
 		public function getText():String

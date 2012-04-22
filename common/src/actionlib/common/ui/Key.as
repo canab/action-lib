@@ -148,6 +148,11 @@ package actionlib.common.ui
 			_code = code;
 		}
 
+		public function get isPressed():Boolean
+		{
+			return KeyboardManager.isKeyPressed(_code);
+		}
+
 		public function get code():int
 		{
 			return _code;
