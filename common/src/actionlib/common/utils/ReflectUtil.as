@@ -63,6 +63,17 @@ package actionlib.common.utils
 			return result;
 		}
 
+		public static function getFields(target:Object):Vector.<String>
+		{
+			var targetType:XML = describeType(target);
+			var result:Vector.<String> = new <String>[];
+			for each (var variable:XML in targetType.variable)
+			{
+				result.push(variable.@name);
+			}
+			return result;
+		}
+
 		public static function copyFieldsAndProperties(source:Object, target:Object):void
 		{
 			var targetType:XML = describeType(target);
