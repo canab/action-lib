@@ -33,5 +33,26 @@ package actionlib.common.utils
 			return matches;
 		}
 
+		public static function getParameters(url:String):Object
+		{
+			var result:Object = {};
+			var parts:Array = url.split("?");
+
+			if (parts.length < 2)
+				return result;
+
+			var pairs:Array = String(parts[1]).split("&");
+			for each (var pair:String in pairs)
+			{
+				parts = pair.split("=");
+				if (parts.length >= 2)
+				{
+					result[parts.shift()] = parts.join();
+				}
+			}
+
+			return result;
+		}
+
 	}
 }
