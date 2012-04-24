@@ -1,6 +1,7 @@
 package actionlib.common.ui
 {
 	import actionlib.common.collections.WeakObjectMap;
+	import actionlib.common.display.StageReference;
 	import actionlib.common.errors.AlreadyInitializedError;
 	import actionlib.common.errors.NotInitializedError;
 	import actionlib.common.utils.DisplayUtil;
@@ -9,6 +10,7 @@ package actionlib.common.ui
 	import flash.display.DisplayObjectContainer;
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.ui.Mouse;
@@ -30,8 +32,7 @@ package actionlib.common.ui
 			if (initialized)
 				throw new AlreadyInitializedError();
 
-			_instance = new MouseManager(new PrivateConstructor());
-			_instance.initialize(root);
+			_instance = new MouseManager(root);
 		}
 
 		public static function get initialized():Boolean
@@ -70,13 +71,7 @@ package actionlib.common.ui
 		private var _pointer:DisplayObject; 
 		private var _targets:WeakObjectMap = new WeakObjectMap(DisplayObject, PointerInfo);
 
-		//noinspection JSUnusedLocalSymbols
-		public function MouseManager(param:PrivateConstructor)
-		{
-			super();
-		}
-		
-		private function initialize(root:Sprite):void
+		public function MouseManager(root:Sprite)
 		{
 			_root = root;
 		}
@@ -105,7 +100,7 @@ package actionlib.common.ui
 				DisplayObjectContainer(_pointer).mouseChildren = false;
 			
 			_root.addChild(_pointer);
-			_root.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			StageReference.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			
 			if (hideMouse)
 				Mouse.hide();
@@ -119,7 +114,9 @@ package actionlib.common.ui
 			
 			addListeners(target);
 
-			if (target.hitTestPoint(_root.stage.mouseX, _root.stage.mouseY, true))
+			var stage:Stage = StageReference.stage;
+
+			if (target.hitTestPoint(stage.mouseX, stage.mouseY, true))
 				setPointer(info.pointer, info.hideMouse);
 			
 			_targets[target] = info;
@@ -166,7 +163,7 @@ package actionlib.common.ui
 			if (_pointer)
 			{
 				DisplayUtil.detachFromDisplay(_pointer);
-				_root.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+				StageReference.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				_pointer = null;
 			}
 			
@@ -189,10 +186,13 @@ package actionlib.common.ui
 		{
 			return Boolean(_root);
 		}
+
+		public function get root():Sprite
+		{
+			return _root;
+		}
 	}
 }
-
-internal class PrivateConstructor { }
 
 internal class PointerInfo
 {
