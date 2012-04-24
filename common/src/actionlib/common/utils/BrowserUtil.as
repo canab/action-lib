@@ -59,5 +59,15 @@
 			   navigateToURL(new URLRequest(url), window);
 			}
 		}
+
+		public static function getURL():String
+		{
+			var result:String = null;
+
+			if (ExternalInterface.available)
+				result =  ExternalInterface.call("eval", "window.location.href");
+
+			return result;
+		}
 	}
 }
