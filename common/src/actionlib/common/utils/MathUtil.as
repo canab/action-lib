@@ -7,8 +7,8 @@ package actionlib.common.utils
 		public static var TO_RADIANS:Number = Math.PI / 180;
 		public static var TO_DEGREES:Number = 180 / Math.PI;
 
-		private static var _PI:Number = Math.PI;
-		private static var _2PI:Number = 2 * Math.PI;
+		public static var PI:Number = Math.PI;
+		public static var DOUBLE_PI:Number = 2 * Math.PI;
 
 		public function MathUtil()
 		{
@@ -57,7 +57,7 @@ package actionlib.common.utils
 			var dy:Number = endPoint.y - startPoint.y;
 
 			if (dx == 0)
-				return (dy > 0) ? 0.5 * _PI : -0.5 * _PI;
+				return (dy > 0) ? 0.5 * PI : -0.5 * PI;
 			else
 				return Math.atan2(dy,  dx);
 		}
@@ -71,12 +71,12 @@ package actionlib.common.utils
 		 */
 		public static function normalizeAngle(angle:Number):Number
 		{
-			angle %= _2PI;
+			angle %= DOUBLE_PI;
 			
-			if (angle > _PI)
-				angle -= _2PI;
-			else if (angle < -_PI)
-				angle += _2PI;
+			if (angle > PI)
+				angle -= DOUBLE_PI;
+			else if (angle < -PI)
+				angle += DOUBLE_PI;
 				
 			return angle;
 		}
@@ -92,22 +92,22 @@ package actionlib.common.utils
 		 */
 		public static function angleDiff(angle1:Number, angle2:Number):Number
 		{
-			angle1 %= _2PI;
-			angle2 %= _2PI;
+			angle1 %= DOUBLE_PI;
+			angle2 %= DOUBLE_PI;
 			
 			if (angle1 < 0)
-				angle1 += _2PI;
+				angle1 += DOUBLE_PI;
 			
 			if (angle2 < 0)
-				angle2 += _2PI;
+				angle2 += DOUBLE_PI;
 			
 			var diff:Number = angle2 - angle1;
 			
-			if (diff < -_PI)
-				diff += _2PI;
+			if (diff < -PI)
+				diff += DOUBLE_PI;
 			
-			if (diff > _PI)
-				diff -= _2PI;
+			if (diff > PI)
+				diff -= DOUBLE_PI;
 			
 			return diff;
 		}
