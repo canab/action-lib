@@ -16,6 +16,11 @@ package actionlib.engine.scene
 			_maxCount = maxCount;
 		}
 
+		override protected virtual function onInitialize():void
+		{
+			addTimer(_period, playNext);
+		}
+
 		public function addItems(renderers:Vector.<IClipRenderer> = null):void
 		{
 			for each (var clipRenderer:IClipRenderer in renderers)
@@ -31,14 +36,12 @@ package actionlib.engine.scene
 			clipRenderer.playCompleteEvent.addListener(onPlayComplete);
 		}
 
-		override protected virtual function onInitialize():void
-		{
-			addTimer(_period, playNext);
-		}
-
 		private function playNext():void
 		{
 			if (_nowPlaying.length >= _maxCount)
+				return;
+
+			if (_items.length == 0)
 				return;
 
 			var clip:IClipRenderer = ArrayUtil.getRandomItem(_items);

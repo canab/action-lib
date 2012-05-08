@@ -1,5 +1,6 @@
 package actionlib.common.query.iterators
 {
+	import actionlib.common.query.Query;
 	import actionlib.common.query.fromDisplayTree;
 
 	import flash.display.DisplayObject;
@@ -10,6 +11,11 @@ package actionlib.common.query.iterators
 
 	public class ButtonIterator extends Proxy
 	{
+		public static function from(button:SimpleButton):Query
+		{
+			return actionlib.common.query.from(new ButtonIterator(button));
+		}
+
 		private var _items:Array = [];
 		private var _index:int = 0;
 

@@ -2,12 +2,14 @@ package actionlib.common.utils
 {
 	import actionlib.common.query.conditions.isAnimation;
 	import actionlib.common.query.fromDisplayTree;
+	import actionlib.common.query.iterators.ButtonIterator;
 
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.FrameLabel;
 	import flash.display.MovieClip;
+	import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -168,11 +170,25 @@ package actionlib.common.utils
 				MovieClip(content).play();
 		}
 
-		public static function hasAnimation(content:DisplayObjectContainer):Boolean
+		public static function hasAnimation(content:DisplayObject):Boolean
 		{
-			return isAnimation(content)
-					? true
-					: fromDisplayTree(content).where(isAnimation).exists();
+			var button:SimpleButton = content as SimpleButton;
+			var sprite:Sprite = content as Sprite;
+
+			if (button)
+			{
+				return ButtonIterator.from(button).where(isAnimation).exists();
+			}
+			else if (sprite)
+			{
+				return isAnimation(content)
+						? true
+						: fromDisplayTree(sprite).where(isAnimation).exists();
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		public static function getPixel(item:DisplayObject, x:int, y:int):uint
