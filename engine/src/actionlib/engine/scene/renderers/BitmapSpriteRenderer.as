@@ -3,12 +3,13 @@ package actionlib.engine.scene.renderers
 	import actionlib.common.utils.BitmapUtil;
 
 	import flash.display.Bitmap;
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 
 	public class BitmapSpriteRenderer extends SpriteRenderer
 	{
-		public static function captureSprite(target:Sprite):BitmapSpriteRenderer
+		public static function captureSprite(target:DisplayObject):BitmapSpriteRenderer
 		{
 			var container:Sprite = new Sprite();
 			container.addChild(target);
