@@ -67,6 +67,16 @@ package actionlib.common.processing
 		{
 			_frameDispatcher.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
+
+		public function get timeLimit():int
+		{
+			return _timeLimit;
+		}
+
+		public function set timeLimit(value:int):void
+		{
+			_timeLimit = value;
+		}
 	}
 
 }

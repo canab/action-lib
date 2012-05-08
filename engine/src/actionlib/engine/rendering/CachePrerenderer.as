@@ -8,7 +8,7 @@ package actionlib.engine.rendering
 
 	public class CachePrerenderer extends AsincCommand implements ICancelableCommand
 	{
-		private var _processor:EnterFrameProcessor = new EnterFrameProcessor();
+		private var _processor:EnterFrameProcessor;
 		private var _cache:BitmapCache;
 		private var _executed:Boolean;
 		private var _addedKeys:Object = {};
@@ -16,6 +16,7 @@ package actionlib.engine.rendering
 		public function CachePrerenderer(cache:BitmapCache)
 		{
 			_cache = cache;
+			_processor = new EnterFrameProcessor();
 		}
 
 		public function addClasses(classes:Array):CachePrerenderer
@@ -47,6 +48,12 @@ package actionlib.engine.rendering
 			return this;
 		}
 
+		public function setFrameTimeLimit(value:int):CachePrerenderer
+		{
+			_processor.timeLimit = value;
+			return this;
+		}
+
 		override public virtual function execute():void
 		{
 			_processor.completeEvent.addListener(onProcessorComplete);
@@ -68,6 +75,7 @@ package actionlib.engine.rendering
 				_processor.cancel();
 			}
 		}
+
 	}
 }
 
