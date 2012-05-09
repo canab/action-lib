@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="Flex" version="4">
-  <component name="Flex.Build.Configuration">
-    <option name="DO_BUILD" value="true" />
-    <option name="OUTPUT_TYPE" value="Library" />
-    <option name="OUTPUT_FILE_NAME" value="common.swc" />
-    <option name="TARGET_PLAYER_VERSION" value="10.1" />
-    <option name="VERSION" value="3" />
+  <component name="FlexBuildConfigurationManager" active="common">
+    <configurations>
+      <configuration name="common" output-type="Library" output-file="common.swc" output-folder="$MODULE_DIR$/../bin">
+        <dependencies target-player="10.0">
+          <sdk name="flex_sdk_4.1" />
+        </dependencies>
+        <compiler-options />
+        <packaging-air-desktop />
+        <packaging-android />
+        <packaging-ios />
+      </configuration>
+    </configurations>
+    <compiler-options />
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/../bin" />
@@ -13,7 +20,7 @@
     <content url="file://$MODULE_DIR$/../common">
       <sourceFolder url="file://$MODULE_DIR$/../common/src" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="flex_sdk_4.1_AS" jdkType="Flex SDK Type" />
+    <orderEntry type="jdk" jdkName="flex_sdk_4.1" jdkType="__CompositeFlexSdk__" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

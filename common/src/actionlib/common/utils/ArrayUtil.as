@@ -116,7 +116,7 @@ package actionlib.common.utils
 			return result;
 		}		
 		
-		public static function equals(source:Array, target:Array):Boolean
+		public static function equals(source:Object, target:Object):Boolean
 		{
 			if (source == null && target == null)
 				return true;
@@ -136,7 +136,7 @@ package actionlib.common.utils
 			return true;
 		}
 		
-		public static function pushUniqueItem(target:Array, item:Object):Boolean
+		public static function pushUniqueItem(target:Object, item:Object):Boolean
 		{
 			if (target.indexOf(item) == -1)
 			{
@@ -149,7 +149,7 @@ package actionlib.common.utils
 			}
 		}
 		
-		public static function pushUniqueItems(target:Array, items:Array):int
+		public static function pushUniqueItems(target:Object, items:Array):int
 		{
 			var result:int = 0;
 			for each (var item:Object in items) 

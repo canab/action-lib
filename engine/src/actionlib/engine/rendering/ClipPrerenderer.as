@@ -2,11 +2,13 @@ package actionlib.engine.rendering
 {
 	import actionlib.common.processing.IProcessable;
 	import actionlib.common.query.conditions.isAnimation;
+	import actionlib.common.query.conditions.nameIs;
 	import actionlib.common.query.fromDisplayTree;
 	import actionlib.common.utils.BitmapUtil;
 	import actionlib.common.utils.StringUtil;
 
 	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -15,6 +17,8 @@ package actionlib.engine.rendering
 
 	public class ClipPrerenderer implements IProcessable
 	{
+		public static var boundsClipName:String = null;
+
 		private static var _renderStats:RenderStats = new RenderStats();
 
 		public static function resetStatistics():void
@@ -50,6 +54,7 @@ package actionlib.engine.rendering
 		private var _container:Sprite = new Sprite();
 		private var _state:String = STATE_NORMAL;
 		private var _stat:StatRecord;
+		private var _boundsClip:DisplayObject;
 
 		public function ClipPrerenderer(sprite:Sprite, frames:Vector.<BitmapFrame> = null)
 		{
@@ -65,6 +70,9 @@ package actionlib.engine.rendering
 		{
 			_currentFrame = 1;
 			_totalFrames = 1;
+
+			if (boundsClipName != null)
+				_boundsClip = fromDisplayTree(_content).where(nameIs(boundsClipName)).findFirst();
 
 			if (isAnimation(_content))
 				pushClip(MovieClip(_content));
@@ -130,7 +138,8 @@ package actionlib.engine.rendering
 					: null;
 			}
 
-			var bounds:Rectangle = BitmapUtil.calculateIntBounds(_container);
+
+			var bounds:Rectangle = getBounds();
 			if (bounds.width == 0 || bounds.height == 0)
 				return null;
 
@@ -146,6 +155,14 @@ package actionlib.engine.rendering
 			_stat.addRenderedFrame(frame);
 
 			return frame;
+		}
+
+		private function getBounds():Rectangle
+		{
+			if (_boundsClip)
+				return _boundsClip.getBounds(_container);
+			else
+				return BitmapUtil.calculateIntBounds(_container);
 		}
 
 		private function gotoNextFrame():void
