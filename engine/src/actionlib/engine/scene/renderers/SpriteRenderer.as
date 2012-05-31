@@ -11,6 +11,7 @@ package actionlib.engine.scene.renderers
 		private var _clickEvent:EventSender;
 		private var _mouseOverEvent:EventSender;
 		private var _mouseOutEvent:EventSender;
+		private var _pressEvent:EventSender;
 
 		public function SpriteRenderer(content:Sprite) 
 		{
@@ -35,6 +36,11 @@ package actionlib.engine.scene.renderers
 			_mouseOutEvent.dispatch();
 		}
 
+		private function onPress(event:MouseEvent):void
+		{
+			_pressEvent.dispatch();
+		}
+
 		/*///////////////////////////////////////////////////////////////////////////////////
 		//
 		// get/set
@@ -55,6 +61,17 @@ package actionlib.engine.scene.renderers
 			}
 
 			return _clickEvent;
+		}
+
+		public function get pressEvent():EventSender
+		{
+			if (!_pressEvent)
+			{
+				_pressEvent = new EventSender(this);
+				_content.addEventListener(MouseEvent.MOUSE_DOWN, onPress);
+			}
+
+			return _pressEvent;
 		}
 
 		public function get mouseOverEvent():EventSender
