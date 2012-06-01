@@ -86,7 +86,11 @@
 
 		private function onFrame(e:Event):void
 		{
-			if (_positionChanged)
+			if (!_content.stage)
+			{
+				stopDrag()
+			}
+			else if (_positionChanged)
 			{
 				_positionChanged = false;
 				_dragEvent.dispatch();
