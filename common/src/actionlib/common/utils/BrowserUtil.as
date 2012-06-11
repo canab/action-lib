@@ -1,5 +1,7 @@
 ﻿package actionlib.common.utils
 {
+	import actionlib.common.errors.NullPointerError;
+
 	import flash.external.ExternalInterface;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
@@ -62,12 +64,23 @@
 
 		public static function getURL():String
 		{
-			var result:String = null;
+			var url:String = null;
 
-			if (ExternalInterface.available)
-				result =  ExternalInterface.call("eval", "window.location.href");
+			try
+			{
+				url = String(ExternalInterface.call('function() {var afk = document.location.href; return afk;}'));
+			}
+			catch (e:Error)
+			{
+				var str:String = e.toString();
+				//var str:String = "Error #2060: Security sandbox violation: ExternalInterface caller http://garbuz-studio.com/testprojects/games/gameSpider.swf cannot access file://localhost/E:/active_work/game_spider/bin/gameSpider3.html.";
 
-			return result;
+				var index:int = str.lastIndexOf("://");
+				if (index >= 0)
+					url = str.substring(index);
+			}
+
+			return url;
 		}
 	}
 }
