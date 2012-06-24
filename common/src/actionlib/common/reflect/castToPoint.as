@@ -1,6 +1,5 @@
 package actionlib.common.reflect
 {
-	import actionlib.common.utils.*;
 	import flash.geom.Point;
 
 	public function castToPoint(object:Object):Point
