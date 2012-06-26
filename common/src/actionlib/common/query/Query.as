@@ -5,12 +5,12 @@ package actionlib.common.query
 	public class Query
 	{
 		//noinspection JSUnusedLocalSymbols
-		private static function trueCondition(item:*):Boolean
+		public static function trueCondition(item:*):Boolean
 		{
 			return true;
 		}
 
-		private static function selfMapper(item:*):*
+		public static function selfMapper(item:*):*
 		{
 			return item;
 		}
