@@ -38,6 +38,8 @@ package actionlib.common.logging.adapters
 
 		public function print(sender:Object, level:LogLevel, message:String):void
 		{
+			message = message.replace(/\r\n/g, "\n");
+
 			if (_field.text.length > 0)
 				_field.appendText("\n");
 
