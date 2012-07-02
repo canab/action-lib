@@ -47,5 +47,14 @@ package actionlib.common.logging.adapters
 			_field.setTextFormat(_formats[level], _field.text.length - message.length - 1, _field.text.length);
 			_field.scrollV = _field.maxScrollV;
 		}
+
+		public function append(level:LogLevel, message:String):void
+		{
+			message = message.replace(/\r\n/g, "\n");
+
+			_field.appendText(message);
+			_field.setTextFormat(_formats[level], _field.text.length - message.length - 1, _field.text.length);
+			_field.scrollV = _field.maxScrollV;
+		}
 	}
 }
