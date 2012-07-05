@@ -82,6 +82,22 @@ package actionlib.engine.scene
 			}
 		}
 
+		public function bringToFront(item:IVectorRenderer):void
+		{
+			if (item.content.parent != _content)
+				throw new ItemNotFoundError();
+
+			_content.setChildIndex(item.content, _content.numChildren - 1);
+		}
+
+		public function sendToBack(item:IVectorRenderer):void
+		{
+			if (item.content.parent != _content)
+				throw new ItemNotFoundError();
+
+			_content.setChildIndex(item.content, 0);
+		}
+
 		public function getMousePosition(output:Vector2 = null):Vector2
 		{
 			if (!output)
