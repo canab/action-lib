@@ -32,7 +32,7 @@ package actionlib.engine.scene
 
 			var childIndex:int = item.childIndex;
 
-			if (childIndex >= 0)
+			if (childIndex >= 0 && childIndex < _content.numChildren)
 				_content.addChildAt(item.content, childIndex);
 			else
 				_content.addChild(item.content);
