@@ -1,5 +1,6 @@
 package actionlib.engine.rendering
 {
+	import actionlib.common.display.StageReference;
 	import actionlib.common.processing.IProcessable;
 	import actionlib.common.query.conditions.isAnimation;
 	import actionlib.common.query.conditions.nameIs;
@@ -14,6 +15,7 @@ package actionlib.engine.rendering
 	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
+	import flash.system.Capabilities;
 
 	public class ClipPrerenderer implements IProcessable
 	{
@@ -159,10 +161,30 @@ package actionlib.engine.rendering
 
 		private function getBounds():Rectangle
 		{
+			var bounds:Rectangle = null;
+
 			if (_boundsClip)
-				return _boundsClip.getBounds(_container);
+			{
+				// air runtime bug
+				if (Capabilities.playerType == "Desktop")
+				{
+					if (StageReference.isInitialized)
+					{
+						StageReference.stage.addChild(_container);
+						bounds = _boundsClip.getBounds(_container);
+						StageReference.stage.removeChild(_container);
+					}
+				}
+
+				if (!bounds)
+					bounds = _boundsClip.getBounds(_container);
+			}
 			else
-				return BitmapUtil.calculateIntBounds(_container);
+			{
+				bounds = BitmapUtil.calculateIntBounds(_container);
+			}
+
+			return bounds;
 		}
 
 		private function gotoNextFrame():void

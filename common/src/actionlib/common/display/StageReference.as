@@ -13,6 +13,12 @@ package actionlib.common.display
 			_stage = stage;
 		}
 
+		public static function get isInitialized():Boolean
+		{
+			return Boolean(_stage);
+		}
+
+
 		public static function get stage():Stage
 		{
 			if (!_stage)
