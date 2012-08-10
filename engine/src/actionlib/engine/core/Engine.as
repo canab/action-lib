@@ -36,6 +36,7 @@ package actionlib.engine.core
 		public function stop():void
 		{
 			dispose();
+			context = null;
 			processManager.stop();
 			_tweenManager.removeAll();
 			_logger.debug("disposed");

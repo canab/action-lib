@@ -64,7 +64,7 @@ package actionlib.engine.core
 
 		protected function hasProcessor(method:Function):Boolean
 		{
-			return activity.hasProcessor(method);
+			return (_activity != null && _activity.hasProcessor(method));
 		}
 
 

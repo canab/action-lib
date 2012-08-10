@@ -31,6 +31,9 @@ package actionlib.engine.core
 			{
 				processor.disposed = true;
 			}
+
+			_processors = null;
+			_processManager = null;
 		}
 
 		public function addFrameListener(method:Function):void

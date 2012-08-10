@@ -42,6 +42,7 @@ package actionlib.engine.core
 				throw new AlreadyDisposedError();
 
 			engine = null;
+			parent = null;
 			disposed = true;
 
 			if (_disposeEvent)

@@ -25,10 +25,22 @@ package actionlib.engine.core
 		{
 			super.dispose();
 
-			for (var comp:ElementBase = _head; comp != null; comp = comp.next)
+			var comp:ElementBase = _head;
+			while (comp != null)
 			{
+				var next:ElementBase = comp.next;
 				comp.dispose();
+
+				// not necessary, for easier seeking of memory leaks
+				comp.prev = null;
+				comp.next = null;
+
+				comp = next;
 			}
+
+			// not necessary, for easier seeking of memory leaks
+			_head = null;
+			_tail = null;
 		}
 
 
@@ -176,6 +188,10 @@ package actionlib.engine.core
 		{
 			var prevItem:ElementBase = item.prev;
 			var nextItem:ElementBase = item.next;
+
+			// not necessary, for easier seeking of memory leaks
+			item.prev = null;
+			item.next = null;
 
 			if (prevItem)
 				prevItem.next = nextItem;
