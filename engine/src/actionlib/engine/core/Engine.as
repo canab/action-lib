@@ -106,6 +106,11 @@ package actionlib.engine.core
 				resume();
 		}
 
+		public function get currentTick():uint
+		{
+			return processManager.currentTick;
+		}
+
 		public function get pauseEvent():EventSender { return _pauseEvent; }
 
 		public function get resumeEvent():EventSender { return _resumeEvent; }

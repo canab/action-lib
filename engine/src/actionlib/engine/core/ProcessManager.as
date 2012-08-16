@@ -8,6 +8,9 @@ package actionlib.engine.core
 		private var _head:ProcessorBase;
 		private var _tail:ProcessorBase;
 		private var _frameDispatcher:Shape = new Shape();
+		private var _processorsToAdd:Array = [];
+
+		internal var currentTick:uint = 0;
 
 		internal function start():void
 		{
@@ -21,6 +24,8 @@ package actionlib.engine.core
 
 		internal function doStep(e:Event = null):void
 		{
+			currentTick += 1;
+
 			var processor:ProcessorBase = _head;
 
 			while (processor)
@@ -35,11 +40,22 @@ package actionlib.engine.core
 
 				processor = nextProcessor;
 			}
+
+			addQueuedProcessors();
+		}
+
+		private function addQueuedProcessors():void
+		{
+			for each (var processor:ProcessorBase in _processorsToAdd)
+			{
+				addToList(processor);
+			}
+			_processorsToAdd.length = 0;
 		}
 
 		internal function addProcessor(processor:ProcessorBase):void
 		{
-			addToList(processor);
+			_processorsToAdd.push(processor);
 		}
 
 

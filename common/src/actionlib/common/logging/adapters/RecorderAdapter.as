@@ -22,16 +22,6 @@ package actionlib.common.logging.adapters
 			_nextAdapter.print(sender,  level, message);
 		}
 
-		public function start():void
-		{
-			_active = true;
-		}
-
-		public function stopRecording():void
-		{
-			_active = false;
-		}
-
 		public function clear():void
 		{
 			_records = [];
@@ -42,5 +32,14 @@ package actionlib.common.logging.adapters
 			return _records.join("\n");
 		}
 
+		public function get active():Boolean
+		{
+			return _active;
+		}
+
+		public function set active(value:Boolean):void
+		{
+			_active = value;
+		}
 	}
 }
