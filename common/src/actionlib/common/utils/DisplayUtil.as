@@ -244,6 +244,16 @@ package actionlib.common.utils
 					clip.addFrameScript(label.frame - 1, handler);
 			}
 		}
+
+		public static function hide(target:DisplayObject):void
+		{
+			target.visible = false;
+		}
+
+		public static function show(target:DisplayObject):void
+		{
+			target.visible = true;
+		}
 	}
 
 }
