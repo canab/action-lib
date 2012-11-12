@@ -9,9 +9,9 @@ package actionlib.common.utils
 
 	public class BitmapUtil
 	{
-		public static function replaceWithBitmap(content:DisplayObject, bounds:Rectangle = null, transparent:Boolean = true):Bitmap
+		public static function replaceWithBitmap(content:DisplayObject, bounds:Rectangle = null, transparent:Boolean = true, fillColor:uint = 0x00000000):Bitmap
 		{
-			var bitmap:Bitmap = convertToBitmapWithPosition(content, bounds, transparent);
+			var bitmap:Bitmap = convertToBitmapWithPosition(content, bounds, transparent, fillColor);
 
 			content.parent.addChildAt(bitmap, content.parent.getChildIndex(content));
 			DisplayUtil.detachFromDisplay(content);
@@ -19,11 +19,11 @@ package actionlib.common.utils
 			return bitmap;
 		}
 
-		public static function convertToBitmapWithPosition(content:DisplayObject, bounds:Rectangle = null, transparent:Boolean = true):Bitmap
+		public static function convertToBitmapWithPosition(content:DisplayObject, bounds:Rectangle = null, transparent:Boolean = true, fillColor:uint = 0x00000000):Bitmap
 		{
 			bounds = bounds || calculateIntBounds(content);
 
-			var bitmap:Bitmap = BitmapUtil.convertToBitmap(content, bounds, transparent);
+			var bitmap:Bitmap = BitmapUtil.convertToBitmap(content, bounds, transparent, fillColor);
 
 			var position:Point = DisplayUtil.transformCoords(bounds.topLeft, content, content.parent);
 			bitmap.x = Math.floor(position.x);
@@ -32,21 +32,22 @@ package actionlib.common.utils
 			return bitmap;
 		}
 
-		public static function convertToBitmap(content:DisplayObject, bounds:Rectangle = null, transparent:Boolean = true):Bitmap
+		public static function convertToBitmap(content:DisplayObject, bounds:Rectangle = null, transparent:Boolean = true, fillColor:uint = 0x00000000):Bitmap
 		{
-			var bitmap:Bitmap = new Bitmap(getBitmapData(content, bounds, transparent));
+			var bitmap:Bitmap = new Bitmap(getBitmapData(content, bounds, transparent, fillColor));
 			bitmap.smoothing = true;
 			return bitmap;
 		}
 
-		public static function getBitmapData(content:DisplayObject, bounds:Rectangle = null, transparent:Boolean = true):BitmapData
+		public static function getBitmapData(content:DisplayObject, bounds:Rectangle = null, transparent:Boolean = true, fillColor:uint = 0x00000000):BitmapData
 		{
 			bounds = bounds || calculateIntBounds(content);
 
 			var matrix:Matrix = new Matrix();
 			matrix.translate(-bounds.left, -bounds.top);
 
-			var fillColor:int = transparent ? 0x00000000 : 0xFF0000;
+			if (!transparent)
+				fillColor &= fillColor & 0xFFFFFF;
 
 			var bitmapData:BitmapData = new BitmapData(bounds.width, bounds.height, transparent, fillColor);
 			bitmapData.draw(content, matrix, null, null, null, true);

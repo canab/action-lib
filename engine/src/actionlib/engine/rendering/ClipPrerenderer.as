@@ -20,6 +20,7 @@ package actionlib.engine.rendering
 	public class ClipPrerenderer implements IProcessable
 	{
 		public static var boundsClipName:String = null;
+		public static var defaultFillColor:uint = 0x00000000;
 
 		private static var _renderStats:RenderStats = new RenderStats();
 
@@ -151,7 +152,7 @@ package actionlib.engine.rendering
 			frame.x = bounds.left - int(_content.x);
 			frame.y = bounds.top - int(_content.y);
 
-			frame.data = new BitmapData(bounds.width, bounds.height, true, 0x000000);
+			frame.data = new BitmapData(bounds.width, bounds.height, true, defaultFillColor);
 			frame.data.draw(_container, matrix);
 
 			_stat.addRenderedFrame(frame);
