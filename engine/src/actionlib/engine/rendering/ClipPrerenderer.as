@@ -57,7 +57,6 @@ package actionlib.engine.rendering
 		private var _container:Sprite = new Sprite();
 		private var _state:String = STATE_NORMAL;
 		private var _stat:StatRecord;
-		private var _boundsClip:DisplayObject;
 
 		public function ClipPrerenderer(sprite:Sprite, frames:Vector.<BitmapFrame> = null)
 		{
@@ -73,9 +72,6 @@ package actionlib.engine.rendering
 		{
 			_currentFrame = 1;
 			_totalFrames = 1;
-
-			if (boundsClipName != null)
-				_boundsClip = fromDisplayTree(_content).where(nameIs(boundsClipName)).findFirst();
 
 			if (isAnimation(_content))
 				pushClip(MovieClip(_content));
@@ -141,7 +137,6 @@ package actionlib.engine.rendering
 					: null;
 			}
 
-
 			var bounds:Rectangle = getBounds();
 			if (bounds.width == 0 || bounds.height == 0)
 				return null;
@@ -162,9 +157,13 @@ package actionlib.engine.rendering
 
 		private function getBounds():Rectangle
 		{
+			var boundsClip:DisplayObject = boundsClipName
+					? fromDisplayTree(_content).where(nameIs(boundsClipName)).findFirst()
+					: null;
+
 			var bounds:Rectangle = null;
 
-			if (_boundsClip)
+			if (boundsClip)
 			{
 				// air runtime bug
 				if (Capabilities.playerType == "Desktop")
@@ -172,13 +171,13 @@ package actionlib.engine.rendering
 					if (StageReference.isInitialized)
 					{
 						StageReference.stage.addChild(_container);
-						bounds = _boundsClip.getBounds(_container);
+						bounds = boundsClip.getBounds(_container);
 						StageReference.stage.removeChild(_container);
 					}
 				}
 
 				if (!bounds)
-					bounds = _boundsClip.getBounds(_container);
+					bounds = boundsClip.getBounds(_container);
 			}
 			else
 			{
