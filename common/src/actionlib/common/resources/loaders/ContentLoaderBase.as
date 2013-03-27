@@ -38,6 +38,13 @@ package actionlib.common.resources.loaders
 		{
 			_nativeLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onLoadComplete);
 			_nativeLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, onLoadError);
+
+			_nativeLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, fakeErrorHandler);
+		}
+
+		private function fakeErrorHandler(event:IOErrorEvent):void
+		{
+			// do nothing, but prevent unhandled exception
 		}
 
 		override protected function stopLoading():void
