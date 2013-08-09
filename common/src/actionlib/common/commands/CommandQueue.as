@@ -65,6 +65,9 @@ package actionlib.common.commands
 
 		public function cancel():void
 		{
+			if (!_started)
+				return;
+
 			_started = false;
 			_canceled = true;
 
