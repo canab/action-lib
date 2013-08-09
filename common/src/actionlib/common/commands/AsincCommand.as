@@ -15,6 +15,11 @@ package actionlib.common.commands
 			_completeEvent.dispatch();
 		}
 
+		protected function dispatchCompleteAsync():void
+		{
+			new CallLaterCommand(_completeEvent.dispatch).execute();
+		}
+
 		public function onComplete(handler:Function):AsincCommand
 		{
 			_completeEvent.addListener(handler);
