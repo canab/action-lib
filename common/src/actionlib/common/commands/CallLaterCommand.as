@@ -11,7 +11,7 @@ package actionlib.common.commands
 		private var _interval:int;
 		private var _timer:Timer;
 
-		public function CallLaterCommand(func:Function = null, interval:int = 10,
+		public function CallLaterCommand(func:Function = null, interval:int = 1,
 			args:Array = null, thisObject:Object = null) 
 		{
 			_interval = interval;
