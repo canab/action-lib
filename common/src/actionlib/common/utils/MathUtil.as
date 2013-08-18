@@ -43,7 +43,7 @@ package actionlib.common.utils
 			return radians * TO_DEGREES;
 		}
 
-		public static function DegreesToRadians(radians:Number):Number
+		public static function degreesToRadians(radians:Number):Number
 		{
 			return radians * TO_RADIANS;
 		}

@@ -1,24 +1,34 @@
 package actionlib.common.display
 {
+	import actionlib.common.utils.MathUtil;
+
 	public class Color
 	{
-		public var r:int = 0;
-		public var g:int = 0;
-		public var b:int = 0;
+		public static function mergeFloatAlpha(color:uint, alpha:Number):Color
+		{
+			var intAlpha:uint = Math.round(255 * alpha) << 24;
+			return new Color(color | intAlpha);
+		}
 
-		public function Color(color:int = 0)
+		public var r:uint = 0;
+		public var g:uint = 0;
+		public var b:uint = 0;
+		public var a:uint = 0;
+
+		public function Color(color:uint = 0)
 		{
 			value = color;
 		}
 
-		public function get value():int
+		public function get value():uint
 		{
-			return r << 16 | g << 8 | b;
+			return a << 24 | r << 16 | g << 8 | b;
 		}
 
-		public function set value(color:int):void
+		public function set value(color:uint):void
 		{
-			r = color >> 16;
+			a = color >> 24 & 0x0000FF;
+			r = color >> 16 & 0x0000FF;
 			g = color >> 8 & 0x0000FF;
 			b = color & 0x0000FF;
 		}
@@ -28,17 +38,29 @@ package actionlib.common.display
 			r *= multiplier;
 			g *= multiplier;
 			b *= multiplier;
+			a *= multiplier;
 
 			return this;
 		}
 
 		public function add(color:Color):Color
 		{
-			r += color.r;
-			g += color.g;
-			b += color.b;
+			r = MathUtil.claimRange(r + color.r, 0, 255);
+			g = MathUtil.claimRange(g + color.g, 0, 255);
+			b = MathUtil.claimRange(b + color.b, 0, 255);
+			a = MathUtil.claimRange(a + color.a, 0, 255);
 
 			return this;
+		}
+
+		public function toString():String
+		{
+			return toHexString();
+		}
+
+		public function toHexString():String
+		{
+			return value.toString(16);
 		}
 	}
 }

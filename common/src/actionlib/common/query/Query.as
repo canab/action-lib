@@ -70,6 +70,20 @@ package actionlib.common.query
 			return undefined;
 		}
 
+		public function findLast(mapper:Function = null):*
+		{
+			map(mapper);
+
+			var result:* = undefined;
+			for each (var item:* in _collection)
+			{
+				if (_condition(item))
+					result = _mapper(item);
+			}
+
+			return result;
+		}
+
 		public function apply(func:Function):void
 		{
 			for each (var item:* in _collection)
