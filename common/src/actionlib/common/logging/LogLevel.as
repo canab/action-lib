@@ -12,6 +12,7 @@ package actionlib.common.logging
 		public static const INFO:LogLevel = addEnum("info", 1);
 		public static const WARN:LogLevel = addEnum("warn", 2);
 		public static const ERROR:LogLevel = addEnum("error", 3);
+		public static const NONE:LogLevel = addEnum("none", 4);
 
 		private static function addEnum(name:String, order:int):LogLevel
 		{

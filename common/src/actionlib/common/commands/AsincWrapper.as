@@ -11,7 +11,7 @@ package actionlib.common.commands
 
 		override public virtual function execute():void
 		{
-			super.execute();
+			_func();
 			dispatchCompleteAsync();
 		}
 	}
