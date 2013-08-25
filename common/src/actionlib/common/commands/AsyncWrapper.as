@@ -1,10 +1,10 @@
 package actionlib.common.commands
 {
-	public class AsincWrapper extends AsincCommand
+	public class AsyncWrapper extends AsincCommand
 	{
 		private var _func:Function;
 
-		public function AsincWrapper(func:Function)
+		public function AsyncWrapper(func:Function)
 		{
 			_func = func;
 		}
