@@ -4,6 +4,15 @@
 	{
 		public static const EMPTY_CHARS:String = ' \t\r\n\f' + String.fromCharCode(160);
 
+		public static function escape(text:String):String
+		{
+			return text
+					.replace(/\\/g, "\\\\")
+					.replace(/"/g, '\\"')
+					.replace(/\r[\n]*/g, '\\n')
+					.replace(/\t/g, '\\t"');
+		}
+
 		public static function endsWith(source:String, suffix:String):Boolean
 		{
 			if (source == null || source.length < suffix.length)
